@@ -1,10 +1,12 @@
 import xyz.jpenilla.resourcefactory.bukkit.BukkitPluginYaml
 
+
 plugins {
   `java-library`
   id("io.papermc.paperweight.userdev") version "1.7.3"
   id("xyz.jpenilla.run-paper") version "2.3.1" // Adds runServer and runMojangMappedServer tasks for testing
   id("xyz.jpenilla.resource-factory-bukkit-convention") version "1.2.0" // Generates plugin.yml based on the Gradle config
+  id("com.gradleup.shadow") version "8.3.3"
 }
 
 group = "io.papermc.paperweight"
@@ -29,10 +31,18 @@ tasks.assemble {
 }
  */
 
+repositories {
+    mavenCentral()
+
+    // If you want to shade the NBT API as well
+    maven(url = "https://repo.codemc.org/repository/maven-public/")
+}
+
 dependencies {
   paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
   // paperweight.foliaDevBundle("1.21.1-R0.1-SNAPSHOT")
   // paperweight.devBundle("com.example.paperfork", "1.21.1-R0.1-SNAPSHOT")
+  implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.7.0")
 }
 
 tasks {
@@ -60,6 +70,7 @@ tasks {
 bukkitPluginYaml {
   main = "io.papermc.paperweight.testplugin.TestPlugin"
   load = BukkitPluginYaml.PluginLoadOrder.STARTUP
-  authors.add("Author")
+  authors.add("badcop")
   apiVersion = "1.21"
+  depend.add("CommandAPI")
 }
