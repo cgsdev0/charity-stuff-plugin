@@ -9,7 +9,6 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,11 +16,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -37,10 +33,6 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.PlayerArgument;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
-
-@DefaultQualifier(NonNull.class)
 public final class CharityMain extends JavaPlugin implements Listener {
 
   static String POTATO_LORE = "It's really hot!";
@@ -93,24 +85,6 @@ public final class CharityMain extends JavaPlugin implements Listener {
             e.setCancelled(true);
         }
     }
-  // @EventHandler
-  //   public void onMenuClick(InventoryClickEvent e) {
-  //       getLogger().info(e.toString());
-  //       if(e.getClickedInventory() == null)return;
-  //       getLogger().info(e.getClickedInventory().getType().toString());
-  //       if(!e.getInventory().getType().equals(InventoryType.PLAYER)){
-  //       getLogger().info("A");
-  //       if(e.getClickedInventory().getType().equals(InventoryType.PLAYER)){
-  //       getLogger().info("B");
-  //       ItemStack item = e.getCursor();
-  //       if(item != null && CharityMain.isPotato(item)) {
-  //       getLogger().info("C");
-  //         e.setCancelled(true);
-  //       }
-  //     }
-  //       }
-  // }
-
 
   public void explodePlayer(CraftPlayer player) {
       this.bossBar.removeAll();
