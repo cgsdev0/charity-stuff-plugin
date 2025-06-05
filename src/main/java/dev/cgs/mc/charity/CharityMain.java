@@ -1,4 +1,4 @@
-package io.papermc.paperweight.testplugin;
+package dev.cgs.mc.charity;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -41,13 +41,13 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 @DefaultQualifier(NonNull.class)
-public final class TestPlugin extends JavaPlugin implements Listener {
+public final class CharityMain extends JavaPlugin implements Listener {
 
   static String POTATO_LORE = "It's really hot!";
   @EventHandler
   public void onDrop(PlayerDropItemEvent event) {
     Item dropped = event.getItemDrop();
-    if (TestPlugin.isPotato(dropped.getItemStack())) {
+    if (CharityMain.isPotato(dropped.getItemStack())) {
         event.setCancelled(true);
       }
   }
@@ -61,7 +61,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
       CraftPlayer attackee = (CraftPlayer)attacked;
       PlayerInventory inv = attacker.getInventory();
       ItemStack hand = inv.getItemInMainHand();
-      if (TestPlugin.isPotato(hand)) {
+      if (CharityMain.isPotato(hand)) {
         this.bossBar.setProgress(1.0);
         this.bossBar.removePlayer(attacker);
         this.bossBar.addPlayer(attackee);
@@ -73,7 +73,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
 
   @EventHandler
   public void onEat(PlayerItemConsumeEvent event) {
-      if (TestPlugin.isPotato(event.getItem())) {
+      if (CharityMain.isPotato(event.getItem())) {
         explodePlayer((CraftPlayer)event.getPlayer());
       }
   }
@@ -81,7 +81,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
     public void onClick(InventoryClickEvent e) {
         CraftPlayer p = (CraftPlayer) e.getWhoClicked();
         Inventory i = e.getInventory();
-        if(TestPlugin.isPotato(e.getCurrentItem())) {
+        if(CharityMain.isPotato(e.getCurrentItem())) {
             if(!i.equals(p.getInventory())) {
                 e.setCancelled(true);
             }
@@ -89,7 +89,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
     }
     @EventHandler
     public void onDrag(InventoryDragEvent e) {
-        if(TestPlugin.isPotato(e.getCursor())) {
+        if(CharityMain.isPotato(e.getCursor())) {
             e.setCancelled(true);
         }
     }
@@ -103,7 +103,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
   //       if(e.getClickedInventory().getType().equals(InventoryType.PLAYER)){
   //       getLogger().info("B");
   //       ItemStack item = e.getCursor();
-  //       if(item != null && TestPlugin.isPotato(item)) {
+  //       if(item != null && CharityMain.isPotato(item)) {
   //       getLogger().info("C");
   //         e.setCancelled(true);
   //       }
@@ -117,7 +117,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
       PlayerInventory inv = player.getInventory();
       int i = 0;
       for(ItemStack is : inv) {
-        if (TestPlugin.isPotato(is)) {
+        if (CharityMain.isPotato(is)) {
           inv.setItem(i, ItemStack.empty());
         }
         i++;
@@ -194,7 +194,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
     .executes((sender, args) -> {
         getServer().getOnlinePlayers().forEach(player -> {
           ItemStack item = player.getInventory().getItemInMainHand();
-          if (item != null && !item.isEmpty() && !TestPlugin.isPotato(item)) {
+          if (item != null && !item.isEmpty() && !CharityMain.isPotato(item)) {
             Item e = player.getWorld().dropItem(player.getLocation().add(new Vector(0, 1, 0)), item);
             e.setPickupDelay(40);
             e.setThrower(player.getUniqueId());

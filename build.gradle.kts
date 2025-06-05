@@ -9,9 +9,9 @@ plugins {
   id("com.gradleup.shadow") version "8.3.3"
 }
 
-group = "io.papermc.paperweight"
+group = "dev.cgs.mc.charity"
 version = "1.0.0-SNAPSHOT"
-description = "Test plugin for paperweight-userdev"
+description = "for the kids"
 
 java {
   // Configure the java toolchain. This allows gradle to auto-provision JDK 21 on systems that only have JDK 11 installed for example.
@@ -66,7 +66,7 @@ tasks {
 // Configure plugin.yml generation
 // - name, version, and description are inherited from the Gradle project.
 bukkitPluginYaml {
-  main = "io.papermc.paperweight.testplugin.TestPlugin"
+  main = "dev.cgs.mc.charity.CharityMain"
   load = BukkitPluginYaml.PluginLoadOrder.STARTUP
   authors.add("badcop")
   apiVersion = "1.21"
