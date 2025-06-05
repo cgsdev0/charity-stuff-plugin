@@ -40,9 +40,7 @@ repositories {
 
 dependencies {
   paperweight.paperDevBundle("1.21.5-R0.1-SNAPSHOT")
-  // paperweight.foliaDevBundle("1.21.1-R0.1-SNAPSHOT")
-  // paperweight.devBundle("com.example.paperfork", "1.21.1-R0.1-SNAPSHOT")
-  implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.1")
+  compileOnly("dev.jorel:commandapi-bukkit-core:10.0.1")
 }
 
 tasks {
