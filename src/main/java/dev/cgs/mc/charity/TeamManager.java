@@ -23,7 +23,7 @@ public class TeamManager {
     }
 
 
-    public static void init() {
+    public static void onEnable() {
         if (instance != null) {
             throw new IllegalStateException("TeamManager is already initialized.");
         }
@@ -37,7 +37,7 @@ public class TeamManager {
         return instance;
     }
 
-    public static void cleanup() {
+    public static void onDisable() {
         instance = null;
     }
 }

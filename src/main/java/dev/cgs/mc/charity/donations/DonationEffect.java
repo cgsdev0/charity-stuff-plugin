@@ -1,5 +1,7 @@
 package dev.cgs.mc.charity.donations;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.Set;
 
@@ -25,7 +27,9 @@ public abstract class DonationEffect {
   }
 
   /** put this on top of your DonationEffect classes OR ELSE (it will crash) */
+  @Retention(RetentionPolicy.RUNTIME)
   public @interface Meta {
+    String key();
     String name();
     Target targets();
     Kind kind();

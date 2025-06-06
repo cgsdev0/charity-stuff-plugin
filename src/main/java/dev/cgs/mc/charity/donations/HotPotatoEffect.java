@@ -37,6 +37,7 @@ import dev.cgs.mc.charity.donations.DonationEffect.Target;
 import dev.cgs.mc.charity.donations.DonationEffect.Kind;
 
 @DonationEffect.Meta(
+  key="hot-potato",
   name="Hot Potato",
   targets=Target.PLAYER,
   kind=Kind.NEGATIVE

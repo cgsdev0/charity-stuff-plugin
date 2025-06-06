@@ -1,28 +1,57 @@
 package dev.cgs.mc.charity;
 
+import java.util.ArrayList;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
+import dev.cgs.mc.charity.donations.DonationEffect;
 import dev.cgs.mc.charity.donations.DonationManager;
+import dev.cgs.mc.charity.donations.ExampleEffect;
+import dev.cgs.mc.charity.donations.HotPotatoEffect;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.StringArgument;
 
 public final class CharityMain extends JavaPlugin {
 
   @Override
   public void onDisable() {
-    TeamManager.cleanup();
-    DonationManager.cleanup();
+    TeamManager.onDisable();
+    DonationManager.onDisable();
   }
 
   @Override
   public void onEnable() {
-    TeamManager.init();
-    DonationManager.init();
+    TeamManager.onEnable();
+    DonationManager.onEnable();
 
+    DonationManager.get().registerEffects(
+      new HotPotatoEffect(),
+      new ExampleEffect()
+    );
+
+    new CommandAPICommand("donation")
+    .withPermission(CommandPermission.OP)
+    .withArguments(
+        new StringArgument("effect")
+          .replaceSuggestions(ArgumentSuggestions.strings(DonationManager.get().getKeys())),
+        new StringArgument("target")
+          .replaceSuggestions(
+            ArgumentSuggestions.strings(info -> {
+              String effect = (String) info.previousArgs().get("effect");
+              DonationEffect.Meta meta = DonationManager.get().getMeta(effect);
+              return new String[] {meta.targets() == DonationEffect.Target.PLAYER ? "player" : "team"};
+            })
+          )
+    )
+    .executes((sender, args) -> {
+    })
+    .register();
     // old stuff
     new CommandAPICommand("butterfingers")
     .withPermission(CommandPermission.OP)               // Required permissions

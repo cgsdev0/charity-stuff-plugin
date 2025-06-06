@@ -10,8 +10,9 @@ import dev.cgs.mc.charity.donations.DonationEffect.Target;
 import dev.cgs.mc.charity.donations.DonationEffect.Kind;
 
 @DonationEffect.Meta(
+  key="example",
   name="Example",
-  targets=Target.PLAYER,
+  targets=Target.TEAM,
   kind=Kind.NEGATIVE
 )
 public class ExampleEffect extends DonationEffect implements Listener {
