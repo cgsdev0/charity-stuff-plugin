@@ -2,9 +2,9 @@ package dev.cgs.mc.charity.donations;
 
 import java.util.List;
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -25,10 +25,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.UUID;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 
 import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.Team;
@@ -44,36 +45,29 @@ import dev.cgs.mc.charity.donations.DonationEffect.Kind;
 )
 public class HotPotatoEffect extends DonationEffect implements Listener {
 
-  private class TeamState {
+  private class State {
     public BossBar bossBar;
     public UUID holder;
-  }
 
-  private HashMap<Team.Leader, TeamState> states = new HashMap<>();
-
-  private TeamState getState(Team team) {
-    Team.Leader key = team.getLeader();
-    if (!states.containsKey(key)) {
-      TeamState state = new TeamState();
-      state.bossBar = Bukkit.createBossBar("Hot Potato", BarColor.RED, BarStyle.SEGMENTED_20);
-      state.bossBar.removeAll();
-      states.put(key, state);
-      return state;
+    public State() {
+      bossBar = Bukkit.createBossBar("Hot Potato", BarColor.RED, BarStyle.SEGMENTED_20);
+      bossBar.removeAll();
     }
-    return states.get(key);
   }
 
-  private TeamState getState(Player player) {
-    Team team = TeamManager.get().fromPlayer(player);
-    return getState(team);
-  }
+  private State state = new State();
+
+  private static <T> T random(Collection<T> coll) {
+    int num = (int) (Math.random() * coll.size());
+    for(T t: coll) if (--num < 0) return t;
+    return null;
+}
 
   @Override
-  public void start(Team team, List<Player> affected) {
-    TeamState state = getState(team);
+  public void start() {
     CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
-    lock(team);
-    CraftPlayer player = (CraftPlayer)affected.get(0);
+    lock();
+    CraftPlayer player = (CraftPlayer)random(plugin.getServer().getOnlinePlayers());
     state.bossBar.setProgress(1.0);
     plugin.getServer().getScheduler().runTaskTimer(plugin, task -> {
       double new_progress = Math.max(state.bossBar.getProgress() - 0.004, 0.0);
@@ -88,16 +82,18 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
     givePotato(player);
   }
 
-  static String POTATO_LORE = "It's really hot!";
+  private final String POTATO_LORE = "It's really hot!";
+  private NamespacedKey potatoKey;
 
-  private static boolean isPotato(ItemStack stack) {
+  public HotPotatoEffect() {
+    CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
+    potatoKey = new NamespacedKey(plugin, "hot-potato");
+  }
+
+  private boolean isPotato(ItemStack stack) {
     if (stack == null) return false;
-    ItemMeta im = stack.getItemMeta();
-    if (im != null &&  im.hasLore()) {
-      List<String> lore = im.getLore();
-      if (lore.contains(POTATO_LORE)) {
-        return true;
-      }
+    if (stack.getPersistentDataContainer().getOrDefault(potatoKey, PersistentDataType.BOOLEAN, false)) {
+      return true;
     }
     return false;
   }
@@ -105,14 +101,13 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
   @EventHandler
   public void onDrop(PlayerDropItemEvent event) {
     Item dropped = event.getItemDrop();
-    if (HotPotatoEffect.isPotato(dropped.getItemStack())) {
+    if (isPotato(dropped.getItemStack())) {
         event.setCancelled(true);
       }
   }
 
 
   public void givePotato(CraftPlayer player) {
-    TeamState state = getState(player);
     state.holder = player.getUniqueId();
     state.bossBar.addPlayer(player);
     // Step 1. check if inventory is full
@@ -122,6 +117,9 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
     lore.add(POTATO_LORE);
     meta.setLore(lore);
     potato.setItemMeta(meta);
+    potato.editPersistentDataContainer(pdc -> {
+      pdc.set(potatoKey, PersistentDataType.BOOLEAN, true);
+    });
     PlayerInventory inv = player.getInventory();
     ItemStack hand = inv.getItemInMainHand();
     if (hand != null && !hand.isEmpty()) {
@@ -156,14 +154,13 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
       CraftPlayer attackee = (CraftPlayer)attacked;
       PlayerInventory inv = attacker.getInventory();
       ItemStack hand = inv.getItemInMainHand();
-      if (HotPotatoEffect.isPotato(hand)) {
+      if (isPotato(hand)) {
         Team a = TeamManager.get().fromPlayer(attacker);
         Team b = TeamManager.get().fromPlayer(attackee);
         if (a != b) {
           // should we allow cross-team potato? idk
           return;
         }
-        TeamState state = getState(a);
         state.bossBar.setProgress(1.0);
         state.bossBar.removePlayer(attacker);
         state.bossBar.addPlayer(attackee);
@@ -174,13 +171,12 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
   }
 
   public void explodePlayer(CraftPlayer player) {
-      unlock(TeamManager.get().fromPlayer(player));
-      TeamState state = getState(player);
+      unlock();
       state.bossBar.removeAll();
       PlayerInventory inv = player.getInventory();
       int i = 0;
       for(ItemStack is : inv) {
-        if (HotPotatoEffect.isPotato(is)) {
+        if (isPotato(is)) {
           inv.setItem(i, ItemStack.empty());
         }
         i++;
@@ -191,7 +187,7 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
 
   @EventHandler
   public void onEat(PlayerItemConsumeEvent event) {
-      if (HotPotatoEffect.isPotato(event.getItem())) {
+      if (isPotato(event.getItem())) {
         explodePlayer((CraftPlayer)event.getPlayer());
       }
   }
@@ -200,7 +196,7 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
     public void onClick(InventoryClickEvent e) {
         CraftPlayer p = (CraftPlayer) e.getWhoClicked();
         Inventory i = e.getInventory();
-        if(HotPotatoEffect.isPotato(e.getCurrentItem())) {
+        if(isPotato(e.getCurrentItem())) {
             if(!i.equals(p.getInventory())) {
                 e.setCancelled(true);
             }
@@ -209,7 +205,7 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
 
     @EventHandler
     public void onDrag(InventoryDragEvent e) {
-        if(HotPotatoEffect.isPotato(e.getCursor())) {
+        if(isPotato(e.getCursor())) {
             e.setCancelled(true);
         }
     }

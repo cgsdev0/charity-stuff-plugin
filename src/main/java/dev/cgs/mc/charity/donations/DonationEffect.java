@@ -35,35 +35,15 @@ public abstract class DonationEffect {
     Kind kind();
   }
 
-  private Set<Player> lockedPlayers;
-
-  public final boolean isAffected(Player player) {
-    return lockedPlayers.contains(player);
-  }
-
   /** Locks a player for this effect type. They won't receive it again until unlocked **/
-  public final void lock(Player player) {
-    lockedPlayers.add(player);
-    DonationManager.get().lock(this, player);
+  public final void lock() {
+    DonationManager.get().lock(this);
   }
 
   /** Unlocks a player for this effect type **/
-  public final void unlock(Player player) {
-    lockedPlayers.remove(player);
-    DonationManager.get().unlock(this, player);
+  public final void unlock() {
+    DonationManager.get().unlock(this);
   }
 
-  /** Locks a team for this effect type. They won't receive it again until unlocked **/
-  public final void lock(Team team) {
-    lockedPlayers.addAll(team.getPlayers());
-    DonationManager.get().lock(this, team);
-  }
-
-  /** Unlocks a team for this effect type **/
-  public final void unlock(Team team) {
-    lockedPlayers.removeAll(team.getPlayers());
-    DonationManager.get().unlock(this, team);
-  }
-
-  public abstract void start(Team team, List<Player> affected);
+  public abstract void start();
 }

@@ -60,22 +60,16 @@ public class DonationManager {
     }
 
     /** Locks a player for this effect type. They won't receive it again until unlocked **/
-    public final void lock(DonationEffect effect, Player player) {
+    public final void lock(DonationEffect effect) {
+      DonationEffect.Meta meta = effect.getClass().getAnnotation(DonationEffect.Meta.class);
+      String key = meta.key();
       // TODO
     }
 
     /** Unlocks a player for this effect type **/
-    public final void unlock(DonationEffect effect, Player player) {
-      // TODO
-    }
-
-    /** Locks a team for this effect type. They won't receive it again until unlocked **/
-    public final void lock(DonationEffect effect, Team team) {
-      // TODO
-    }
-
-    /** Unlocks a team for this effect type **/
-    public final void unlock(DonationEffect effect, Team team) {
+    public final void unlock(DonationEffect effect) {
+      DonationEffect.Meta meta = effect.getClass().getAnnotation(DonationEffect.Meta.class);
+      String key = meta.key();
       // TODO
     }
 
