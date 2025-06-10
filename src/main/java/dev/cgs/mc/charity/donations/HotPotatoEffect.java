@@ -34,14 +34,12 @@ import java.util.Collection;
 import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.Team;
 import dev.cgs.mc.charity.TeamManager;
-import dev.cgs.mc.charity.donations.DonationEffect.Target;
-import dev.cgs.mc.charity.donations.DonationEffect.Kind;
+import dev.cgs.mc.charity.donations.DonationEffect.Tier;
 
 @DonationEffect.Meta(
   key="hot-potato",
   name="Hot Potato",
-  targets=Target.PLAYER,
-  kind=Kind.NEGATIVE
+  tier=Tier.TIER_2
 )
 public class HotPotatoEffect extends DonationEffect implements Listener {
 
@@ -70,6 +68,10 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
     CraftPlayer player = (CraftPlayer)random(plugin.getServer().getOnlinePlayers());
     state.bossBar.setProgress(1.0);
     plugin.getServer().getScheduler().runTaskTimer(plugin, task -> {
+      if (state.holder == null) {
+        task.cancel();
+        return;
+      }
       double new_progress = Math.max(state.bossBar.getProgress() - 0.004, 0.0);
       state.bossBar.setProgress(new_progress);
       if (new_progress == 0.0) {
@@ -155,12 +157,6 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
       PlayerInventory inv = attacker.getInventory();
       ItemStack hand = inv.getItemInMainHand();
       if (isPotato(hand)) {
-        Team a = TeamManager.get().fromPlayer(attacker);
-        Team b = TeamManager.get().fromPlayer(attackee);
-        if (a != b) {
-          // should we allow cross-team potato? idk
-          return;
-        }
         state.bossBar.setProgress(1.0);
         state.bossBar.removePlayer(attacker);
         state.bossBar.addPlayer(attackee);
@@ -173,6 +169,7 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
   public void explodePlayer(CraftPlayer player) {
       unlock();
       state.bossBar.removeAll();
+      state.holder = null;
       PlayerInventory inv = player.getInventory();
       int i = 0;
       for(ItemStack is : inv) {

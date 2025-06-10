@@ -2,28 +2,18 @@ package dev.cgs.mc.charity.donations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.List;
-import java.util.Set;
-
-import org.bukkit.entity.Player;
-
-import dev.cgs.mc.charity.Team;
 
 // This is a thing that happened because of a donation
 public abstract class DonationEffect {
 
-  public enum Target {
-    /** Effect targets a random player **/
-    PLAYER,
-    /** Effect targets the entire team **/
-    TEAM
-  }
-
-  public enum Kind {
-    /** This effect helps the team **/
-    POSITIVE,
-    /** This effect harms the team **/
-    NEGATIVE
+  // TODO: 10% chance of upgrading from neutral -> mild??
+  public enum Tier {
+    /** Minimal chaos. $1 - $10 donation **/
+    TIER_1,
+    /** Mild chaos. $10 - $100 donation **/
+    TIER_2,
+    /** Maximum chaos! $100+ donation **/
+    TIER_3
   }
 
   /** put this on top of your DonationEffect classes OR ELSE (it will crash) */
@@ -31,8 +21,7 @@ public abstract class DonationEffect {
   public @interface Meta {
     String key();
     String name();
-    Target targets();
-    Kind kind();
+    Tier tier();
   }
 
   /** Locks a player for this effect type. They won't receive it again until unlocked **/

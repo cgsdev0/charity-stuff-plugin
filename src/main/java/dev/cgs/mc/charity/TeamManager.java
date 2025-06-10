@@ -1,7 +1,10 @@
 package dev.cgs.mc.charity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.bukkit.entity.Player;
 
@@ -22,6 +25,15 @@ public class TeamManager {
       return teams.get(0);
     }
 
+    public List<String> getKeys() {
+    return Stream.of(Team.Leader.values())
+               .map(Enum::name)
+               .collect(Collectors.toList());
+    }
+
+    public Team fromLeader(Team.Leader leader) {
+      return teams.stream().filter(team -> team.getLeader() == leader).findFirst().orElse(null);
+    }
 
     public static void onEnable() {
         if (instance != null) {

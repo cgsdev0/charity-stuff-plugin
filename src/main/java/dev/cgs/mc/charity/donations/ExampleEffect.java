@@ -2,14 +2,12 @@ package dev.cgs.mc.charity.donations;
 
 import org.bukkit.event.Listener;
 
-import dev.cgs.mc.charity.donations.DonationEffect.Target;
-import dev.cgs.mc.charity.donations.DonationEffect.Kind;
+import dev.cgs.mc.charity.donations.DonationEffect.Tier;
 
 @DonationEffect.Meta(
   key="example",
   name="Example",
-  targets=Target.TEAM,
-  kind=Kind.NEGATIVE
+  tier=Tier.TIER_1
 )
 public class ExampleEffect extends DonationEffect implements Listener {
   @Override

@@ -22,12 +22,15 @@ public class DonationManager {
     private class AugmentedEffect {
       public DonationEffect effect;
       public DonationEffect.Meta meta;
+      public boolean locked;
 
       public AugmentedEffect(DonationEffect effect, DonationEffect.Meta meta) {
         this.effect = effect;
         this.meta = meta;
+        this.locked = false;
       }
     }
+
     private HashMap<String, AugmentedEffect> effects;
 
     private DonationManager() {
@@ -59,18 +62,26 @@ public class DonationManager {
       return this.effects.get(key).meta;
     }
 
+    public void start(String key) {
+      AugmentedEffect effect = effects.get(key);
+      if (effect.locked) {
+        throw new Error("That effect is locked!");
+      }
+      effect.effect.start();
+    }
+
     /** Locks a player for this effect type. They won't receive it again until unlocked **/
     public final void lock(DonationEffect effect) {
       DonationEffect.Meta meta = effect.getClass().getAnnotation(DonationEffect.Meta.class);
       String key = meta.key();
-      // TODO
+      effects.get(key).locked = true;
     }
 
     /** Unlocks a player for this effect type **/
     public final void unlock(DonationEffect effect) {
       DonationEffect.Meta meta = effect.getClass().getAnnotation(DonationEffect.Meta.class);
       String key = meta.key();
-      // TODO
+      effects.get(key).locked = false;
     }
 
     public static void onEnable() {
