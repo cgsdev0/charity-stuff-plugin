@@ -1,12 +1,13 @@
 package dev.cgs.mc.charity;
 
-import java.util.ArrayList;
-
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+
+import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 
 import dev.cgs.mc.charity.donations.DonationEffect;
 import dev.cgs.mc.charity.donations.DonationManager;
@@ -16,17 +17,35 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
+import net.minecraft.server.level.ServerPlayer;
 
 public final class CharityMain extends JavaPlugin {
+
+
+  public static final String PLUGIN_ID = "charity_plugin";
+  private VoicePlugin voicechatPlugin;
 
   @Override
   public void onDisable() {
     TeamManager.onDisable();
     DonationManager.onDisable();
+
+    if (voicechatPlugin != null) {
+        getServer().getServicesManager().unregister(voicechatPlugin);
+        getLogger().info("Successfully unregistered voicechat_interaction plugin");
+    }
   }
 
   @Override
   public void onEnable() {
+    BukkitVoicechatService service = getServer().getServicesManager().load(BukkitVoicechatService.class);
+    if (service != null) {
+        voicechatPlugin = new VoicePlugin();
+        service.registerPlugin(voicechatPlugin);
+        getLogger().info("Successfully registered voicechat plugin");
+    } else {
+        getLogger().info("Failed to register voicechat plugin");
+    }
     TeamManager.onEnable();
     DonationManager.onEnable();
 
@@ -76,5 +95,7 @@ public final class CharityMain extends JavaPlugin {
     //     CraftPlayer player = (CraftPlayer) args.get("player");
     // })
     // .register();
+
+    // voice chat stuff
   }
 }

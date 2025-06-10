@@ -25,11 +25,17 @@ repositories {
 
     // If you want to shade the NBT API as well
     maven(url = "https://repo.codemc.org/repository/maven-public/")
+    maven (url = "https://maven.maxhenkel.de/repository/public")
+    maven(url = "https://mvn.0110.be/releases")
 }
 
 dependencies {
   paperweight.paperDevBundle("1.21.5-R0.1-SNAPSHOT")
   compileOnly("dev.jorel:commandapi-bukkit-core:10.0.1")
+  implementation("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
+  compileOnly("de.maxhenkel.voicechat:voicechat-api:2.5.27")
+  implementation("be.tarsos.dsp:core:2.5")
+  implementation("be.tarsos.dsp:jvm:2.5")
 }
 
 tasks {
@@ -47,8 +53,8 @@ tasks {
 // - name, version, and description are inherited from the Gradle project.
 bukkitPluginYaml {
   main = "dev.cgs.mc.charity.CharityMain"
-  load = BukkitPluginYaml.PluginLoadOrder.STARTUP
   authors.add("badcop")
   apiVersion = "1.21"
   depend.add("CommandAPI")
+  depend.add("voicechat")
 }

@@ -1,0 +1,10 @@
+api-version: '1.21'
+name: charity-stuff-plugin
+version: 1.0.0-SNAPSHOT
+main: dev.cgs.mc.charity.CharityMain
+description: for the kids
+authors:
+- badcop
+depend:
+- CommandAPI
+- voicechat
