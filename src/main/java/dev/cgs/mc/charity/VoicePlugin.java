@@ -72,12 +72,6 @@ public class VoicePlugin implements VoicechatPlugin, Listener {
     state.remove(uuid);
   }
 
-  @EventHandler
-  public void onLogin(PlayerLoginEvent event) {
-    UUID uuid = event.getPlayer().getUniqueId();
-    VoicePlugin.setPitchScale(uuid, 1.5);
-  }
-
   @Override
   public void initialize(VoicechatApi api) {
       voicechatApi = api;

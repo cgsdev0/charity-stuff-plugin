@@ -7,8 +7,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-import com.breakfastquay.rubberband.RubberBandLiveShifter;
-
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 
 import dev.cgs.mc.charity.donations.DonationEffect;
@@ -19,7 +17,6 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
-import net.minecraft.server.level.ServerPlayer;
 
 public final class CharityMain extends JavaPlugin {
 
