@@ -45,7 +45,7 @@ public class RubberBandLiveShifter
     public native void setFormantOption(int options);
 
     public native int getBlockSize();
-    
+
     public native void shift(float[][] input, int inOffset, float[][] output, int outOffset);
     public void shift(float[][] input, float[][] output) {
         shift(input, 0, output, 0);
@@ -67,4 +67,3 @@ public class RubberBandLiveShifter
 	System.loadLibrary("rubberband-jni");
     }
 };
-

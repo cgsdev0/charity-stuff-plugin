@@ -1,9 +1,18 @@
 package dev.cgs.mc.charity;
 
-import java.util.HashMap;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
+
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
+import com.breakfastquay.rubberband.RubberBandLiveShifter;
 
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.PitchShifter;
@@ -19,25 +28,60 @@ import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
 import de.maxhenkel.voicechat.api.opus.OpusDecoder;
 import de.maxhenkel.voicechat.api.opus.OpusEncoder;
 
-public class VoicePlugin implements VoicechatPlugin {
+public class VoicePlugin implements VoicechatPlugin, Listener {
 
   public static VoicechatApi voicechatApi;
 
   @Nullable
   public static VoicechatServerApi voicechatServerApi;
 
-
-  public class CoderPair {
+  public static class VoiceChangerState {
     public OpusDecoder decoder;
     public OpusEncoder encoder;
-    public PitchShifter shifter;
+    public RubberBandLiveShifter rubberband;
+    public float[] inputBuffer;
+    public int inputSize;
+    public float[] outputBuffer;
+    public int outputSize;
+
+    VoiceChangerState() {
+      encoder = voicechatApi.createEncoder();
+      decoder = voicechatApi.createDecoder();
+      rubberband = new RubberBandLiveShifter(48000, 1, 0);
+      inputBuffer = new float[2048];
+      outputBuffer = new float[2048];
+      inputSize = 0;
+      outputSize = 0;
+    }
+
+    public void dispose() {
+      encoder.close();
+      decoder.close();
+      rubberband.dispose();
+    }
   }
-  private static HashMap<UUID, CoderPair> coders;
+  private static ConcurrentHashMap<UUID, VoiceChangerState> state;
+
+  @EventHandler
+  public void onLogout(PlayerQuitEvent event) {
+    UUID uuid = event.getPlayer().getUniqueId();
+    if (!state.containsKey(uuid)) {
+      return;
+    }
+    state.get(uuid).dispose();
+    state.remove(uuid);
+  }
+
+  @EventHandler
+  public void onLogin(PlayerLoginEvent event) {
+    UUID uuid = event.getPlayer().getUniqueId();
+    VoicePlugin.setPitchScale(uuid, 1.5);
+  }
 
   @Override
   public void initialize(VoicechatApi api) {
       voicechatApi = api;
-      coders = new HashMap<>();
+      state = new ConcurrentHashMap<>();
   }
 
   @Override
@@ -45,18 +89,17 @@ public class VoicePlugin implements VoicechatPlugin {
       return CharityMain.PLUGIN_ID;
   }
 
-  public CoderPair getCoders(UUID who) {
-    if (!coders.containsKey(who)) {
-      CoderPair pair = new CoderPair();
-      pair.encoder = voicechatApi.createEncoder();
-      pair.decoder = voicechatApi.createDecoder();
+  public static void setPitchScale(UUID who, double scale) {
+    VoiceChangerState v = VoicePlugin.getVoiceChangerState(who);
+    v.rubberband.setPitchScale(scale);
+  }
 
-      int bufferSize = 960;
-      int sampleRate = 48000;
-      pair.shifter = new PitchShifter(1.0f, sampleRate, bufferSize, bufferSize-32);
-      coders.put(who, pair);
+  public static VoiceChangerState getVoiceChangerState(UUID who) {
+    if (!state.containsKey(who)) {
+      VoiceChangerState v = new VoiceChangerState();
+      state.put(who, v);
     }
-    return coders.get(who);
+    return state.get(who);
   }
 
   @Override
@@ -75,43 +118,79 @@ public class VoicePlugin implements VoicechatPlugin {
         return;
     }
 
-
     UUID who = senderConnection.getPlayer().getUuid();
-    CoderPair pair = getCoders(who);
+    VoiceChangerState v = getVoiceChangerState(who);
+
+    // don't bother if the pitch scale is close
+    if (Math.abs(1.0 - v.rubberband.getPitchScale()) < 0.05) {
+      return;
+    }
 
     byte[] opus = event.getPacket().getOpusEncodedData();
     if (opus.length <= 0) {
-      pair.decoder.resetState();
-      pair.encoder.resetState();
+      v.decoder.resetState();
+      v.encoder.resetState();
+      v.inputSize = 0;
+      v.outputSize = 0;
       return;
     }
-    short[] decodedPCM = pair.decoder.decode(opus);
-    float[] floats = new float[decodedPCM.length];
-    for (int i = 0; i < decodedPCM.length; i++) {
-        floats[i] = decodedPCM[i] / 32768.0f;
+    float[] decodedPCM = shortsToFloats(v.decoder.decode(opus));
+    System.arraycopy(decodedPCM, 0, v.inputBuffer, v.inputSize, 960);
+    v.inputSize += 960;
+
+    // 2. Process in 512-sample blocks
+    while (v.inputSize >= 512) {
+        float[][] input = new float[1][512];
+        System.arraycopy(v.inputBuffer, 0, input[0], 0, 512);
+
+        float[][] output = new float[1][512];
+        v.rubberband.shift(input, 0, output, 0);
+
+        // Append output
+        System.arraycopy(output[0], 0, v.outputBuffer, v.outputSize, 512);
+        v.outputSize += 512;
+
+        // Slide input buffer
+        System.arraycopy(v.inputBuffer, 512, v.inputBuffer, 0, v.inputSize - 512);
+        v.inputSize -= 512;
     }
 
-    TarsosDSPAudioFormat format = new TarsosDSPAudioFormat(
-      48000, 16, 1, true, false
-    );
-    AudioEvent audioEvent = new AudioEvent(format);
-    audioEvent.setFloatBuffer(floats);
-    pair.shifter.process(audioEvent);
+    // 3. If we have enough output, encode 960 samples
+    if (v.outputSize >= 960) {
+        float[] toEncode = new float[960];
+        System.arraycopy(v.outputBuffer, 0, toEncode, 0, 960);
 
-    float[] outputFloat = audioEvent.getFloatBuffer();
-    short[] outputPCM = new short[outputFloat.length];
-    for (int i = 0; i < outputFloat.length; i++) {
-        float sample = outputFloat[i];
+        // Slide remaining output buffer
+        System.arraycopy(v.outputBuffer, 960, v.outputBuffer, 0, v.outputSize - 960);
+        v.outputSize -= 960;
 
-        // Clamp first
-        if (sample > 1.0f) sample = 1.0f;
-        if (sample < -1.0f) sample = -1.0f;
-
-        // Scale
-        output[i] = (short)(sample * 32767.0f);
+        // Encode and store
+        byte[] encoded = v.encoder.encode(floatsToShorts(toEncode));
+        event.getPacket().setOpusEncodedData(encoded);
+    } else {
+        // Not enough data yet, encode silence
+        event.getPacket().setOpusEncodedData(v.encoder.encode(new short[960]));
     }
-    byte[] encoded = pair.encoder.encode(outputPCM);
-    event.getPacket().setOpusEncodedData(encoded);
   }
+  public static float[] shortsToFloats(short[] input) {
+    float[] output = new float[input.length];
+    for (int i = 0; i < input.length; i++) {
+        output[i] = input[i] / 32768.0f;
+    }
+    return output;
+  }
+  public static short[] floatsToShorts(float[] input) {
+    short[] output = new short[input.length];
+    for (int i = 0; i < input.length; i++) {
+        float sample = input[i] * 32768.0f;
+
+        // Clamp to avoid overflow
+        if (sample > 32767.0f) sample = 32767.0f;
+        if (sample < -32768.0f) sample = -32768.0f;
+
+        output[i] = (short) sample;
+    }
+    return output;
+}
 
 }

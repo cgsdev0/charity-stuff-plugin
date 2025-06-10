@@ -7,6 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
+import com.breakfastquay.rubberband.RubberBandLiveShifter;
+
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 
 import dev.cgs.mc.charity.donations.DonationEffect;
@@ -41,6 +43,7 @@ public final class CharityMain extends JavaPlugin {
     BukkitVoicechatService service = getServer().getServicesManager().load(BukkitVoicechatService.class);
     if (service != null) {
         voicechatPlugin = new VoicePlugin();
+        getServer().getPluginManager().registerEvents(voicechatPlugin, this);
         service.registerPlugin(voicechatPlugin);
         getLogger().info("Successfully registered voicechat plugin");
     } else {
