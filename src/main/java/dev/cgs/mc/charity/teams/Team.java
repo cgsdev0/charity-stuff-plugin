@@ -2,7 +2,6 @@ package dev.cgs.mc.charity.teams;
 
 import dev.cgs.mc.charity.objectives.Objective;
 import dev.cgs.mc.charity.objectives.ObjectiveManager;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,6 +33,7 @@ public class Team implements ConfigurationSerializable {
     this.leader = Team.Leader.valueOf((String) data.get("leader"));
     this.players = (Set<OfflinePlayer>) data.get("players");
     this.objectives = (HashMap<ObjectiveKey, UnlockMeta>) data.get("objectives");
+    this.onlinePlayers = new HashSet<>();
   }
 
   public enum Leader { BADCOP, JAKE }
@@ -96,6 +96,7 @@ public class Team implements ConfigurationSerializable {
     this.leader = leader;
     this.objectives = new HashMap<>();
     this.players = new HashSet<>();
+    this.onlinePlayers = new HashSet<>();
   }
 
   public void unlock(String objective, OfflinePlayer who) {
