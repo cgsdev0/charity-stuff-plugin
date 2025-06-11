@@ -66,8 +66,7 @@ public class TeamManager implements Listener {
   }
 
   public Team fromPlayer(Player player) {
-    // TODO
-    return teams.get(0);
+    return teams.stream().filter(team -> team.hasPlayer(player)).findFirst().orElse(null);
   }
 
   public List<String> getKeys() {

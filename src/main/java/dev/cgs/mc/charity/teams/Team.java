@@ -26,6 +26,7 @@ public class Team implements ConfigurationSerializable {
     data.put("leader", leader.toString());
     data.put("players", players);
     data.put("objectives", objectives);
+    data.put("score", score);
     return data;
   }
 
@@ -33,6 +34,7 @@ public class Team implements ConfigurationSerializable {
     this.leader = Team.Leader.valueOf((String) data.get("leader"));
     this.players = (Set<OfflinePlayer>) data.get("players");
     this.objectives = (HashMap<ObjectiveKey, UnlockMeta>) data.get("objectives");
+    this.score = (int) data.getOrDefault("score", 0);
     this.onlinePlayers = new HashSet<>();
   }
 
@@ -91,12 +93,14 @@ public class Team implements ConfigurationSerializable {
   private Set<Player> onlinePlayers;
   private HashMap<ObjectiveKey, UnlockMeta> objectives;
   private Leader leader;
+  private int score;
 
   public Team(Leader leader) {
     this.leader = leader;
     this.objectives = new HashMap<>();
     this.players = new HashSet<>();
     this.onlinePlayers = new HashSet<>();
+    this.score = 0;
   }
 
   public void unlock(String objective, OfflinePlayer who) {
@@ -111,11 +115,16 @@ public class Team implements ConfigurationSerializable {
     if (objectives.containsKey(key)) {
       return;
     }
+    score += meta.worth();
     UnlockMeta unlock = new UnlockMeta();
     unlock.unlockedBy = who;
     unlock.unlockedAt = new Date();
     objectives.put(key, unlock);
     Bukkit.getLogger().info(who.getName() + " unlocked " + objective + "!");
+  }
+
+  public boolean hasPlayer(Player player) {
+    return this.players.contains(player);
   }
 
   public void assign(Player player) {

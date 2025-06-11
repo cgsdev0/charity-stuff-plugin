@@ -60,8 +60,7 @@ public final class CharityMain extends JavaPlugin {
 
     DonationManager.get().registerEffects(
         // add new effects here
-        new HotPotatoEffect(), new ExampleEffect(), new SwapEffect()
-    );
+        new HotPotatoEffect(), new ExampleEffect(), new SwapEffect());
 
     ObjectiveManager.get().registerObjectives(new ExampleObjective());
 
@@ -91,7 +90,7 @@ public final class CharityMain extends JavaPlugin {
         .executes((sender, args) -> {
           String objective = (String) args.get("objective");
           Player player = (Player) args.get("player");
-          TeamManager.get().fromLeader(Team.Leader.JAKE).unlock(objective, player);
+          TeamManager.get().fromPlayer(player).unlock(objective, player);
           TeamManager.get().saveData();
         })
         .register();
