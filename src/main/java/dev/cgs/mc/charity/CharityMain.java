@@ -60,7 +60,7 @@ public final class CharityMain extends JavaPlugin {
 
     Donations.get().registerEffects(
         // add new effects here
-        new HotPotatoEffect(), new ExampleEffect(), new SwapEffect());
+        new HotPotatoEffect(), new ExampleEffect(), new SwapEffect(), new RotateEffect());
 
     Objectives.get().registerObjectives(new ExampleObjective());
 
@@ -68,8 +68,8 @@ public final class CharityMain extends JavaPlugin {
     new CommandAPICommand("donation")
         .withAliases("d")
         .withPermission(CommandPermission.OP)
-        .withArguments(new MultiLiteralArgument(
-            "effect", Donations.get().getKeys().toArray(String[] ::new)))
+        .withArguments(
+            new MultiLiteralArgument("effect", Donations.get().getKeys().toArray(String[] ::new)))
         .executes((sender, args) -> {
           String effect = (String) args.get("effect");
           try {
@@ -98,8 +98,8 @@ public final class CharityMain extends JavaPlugin {
     CommandAPICommand teamAssign =
         new CommandAPICommand("assign")
             .withArguments(new PlayerArgument("player"))
-            .withArguments(new MultiLiteralArgument(
-                "team", Teams.get().getKeys().toArray(String[] ::new)))
+            .withArguments(
+                new MultiLiteralArgument("team", Teams.get().getKeys().toArray(String[] ::new)))
             .executes((sender, args) -> {
               Player p = (Player) args.get("player");
               String teamName = (String) args.get("team");

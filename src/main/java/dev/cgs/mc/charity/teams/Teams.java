@@ -92,16 +92,16 @@ public class Teams implements Listener {
   public void onLogin(PlayerLoginEvent event) {
     var joiningPlayer = event.getPlayer();
     var team = fromPlayer(joiningPlayer);
-
-    team.onLogin(joiningPlayer);
+    if (team != null)
+      team.onLogin(joiningPlayer);
   }
 
   @EventHandler
   public void onQuit(PlayerQuitEvent event) {
     var quittingPlayer = event.getPlayer();
     var team = fromPlayer(quittingPlayer);
-
-    team.onQuit(quittingPlayer);
+    if (team != null)
+      team.onQuit(quittingPlayer);
   }
 
   public static Teams get() {

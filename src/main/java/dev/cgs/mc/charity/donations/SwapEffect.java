@@ -3,19 +3,13 @@ package dev.cgs.mc.charity.donations;
 import dev.cgs.mc.charity.donations.DonationEffect.Tier;
 import dev.cgs.mc.charity.teams.Team;
 import dev.cgs.mc.charity.teams.Teams;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
-@DonationEffect.Meta(
-  key="swap",
-  name="Swap Position",
-  tier=Tier.TIER_1
-)
-public class SwapEffect extends DonationEffect implements Listener {
+@DonationEffect.Meta(key = "swap", name = "Swap Position", tier = Tier.TIER_1)
+public class SwapEffect extends DonationEffect {
   @Override
   public void start() {
     Team a = Teams.get().fromLeader(Team.Leader.BADCOP);
