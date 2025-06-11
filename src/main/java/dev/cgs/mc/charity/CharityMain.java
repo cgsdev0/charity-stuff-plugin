@@ -1,10 +1,7 @@
 package dev.cgs.mc.charity;
 
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
-import dev.cgs.mc.charity.donations.DonationEffect;
-import dev.cgs.mc.charity.donations.DonationManager;
-import dev.cgs.mc.charity.donations.ExampleEffect;
-import dev.cgs.mc.charity.donations.HotPotatoEffect;
+import dev.cgs.mc.charity.donations.*;
 import dev.cgs.mc.charity.objectives.ExampleObjective;
 import dev.cgs.mc.charity.objectives.ObjectiveManager;
 import dev.cgs.mc.charity.teams.Team;
@@ -63,7 +60,8 @@ public final class CharityMain extends JavaPlugin {
 
     DonationManager.get().registerEffects(
         // add new effects here
-        new HotPotatoEffect(), new ExampleEffect());
+        new HotPotatoEffect(), new ExampleEffect(), new SwapEffect()
+    );
 
     ObjectiveManager.get().registerObjectives(new ExampleObjective());
 

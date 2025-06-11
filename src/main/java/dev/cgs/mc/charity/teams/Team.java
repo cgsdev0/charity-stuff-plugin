@@ -2,7 +2,7 @@ package dev.cgs.mc.charity.teams;
 
 import dev.cgs.mc.charity.objectives.Objective;
 import dev.cgs.mc.charity.objectives.ObjectiveManager;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -88,6 +88,7 @@ public class Team implements ConfigurationSerializable {
   }
 
   private Set<OfflinePlayer> players;
+  private Set<Player> onlinePlayers;
   private HashMap<ObjectiveKey, UnlockMeta> objectives;
   private Leader leader;
 
@@ -116,12 +117,25 @@ public class Team implements ConfigurationSerializable {
     Bukkit.getLogger().info(who.getName() + " unlocked " + objective + "!");
   }
 
-  public void assign(OfflinePlayer player) {
+  public void assign(Player player) {
     players.add(player);
+    onlinePlayers.add(player);
+  }
+
+  public void onLogin(Player player) {
+    onlinePlayers.add(player);
+  }
+
+  public void onQuit(Player player) {
+    onlinePlayers.remove(player);
   }
 
   public Set<OfflinePlayer> getPlayers() {
     return players;
+  }
+
+  public Set<Player> getOnlinePlayers() {
+    return onlinePlayers;
   }
 
   public Leader getLeader() {

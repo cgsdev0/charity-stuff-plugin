@@ -13,9 +13,13 @@ import me.lucko.spark.paper.common.util.config.FileConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class TeamManager {
+public class TeamManager implements Listener {
   private static TeamManager instance;
   private File dataFile;
 
@@ -37,6 +41,7 @@ public class TeamManager {
       }
     }
   }
+
   public void saveData() {
     if (dataFile == null)
       return;
@@ -77,8 +82,27 @@ public class TeamManager {
     if (instance != null) {
       throw new IllegalStateException("TeamManager is already initialized.");
     }
+
     instance = new TeamManager();
     instance.loadData();
+    CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
+    plugin.getServer().getPluginManager().registerEvents(instance, plugin);
+  }
+
+  @EventHandler
+  public void onLogin(PlayerLoginEvent event) {
+    var joiningPlayer = event.getPlayer();
+    var team = fromPlayer(joiningPlayer);
+
+    team.onLogin(joiningPlayer);
+  }
+
+  @EventHandler
+  public void onQuit(PlayerQuitEvent event) {
+    var quittingPlayer = event.getPlayer();
+    var team = fromPlayer(quittingPlayer);
+
+    team.onQuit(quittingPlayer);
   }
 
   public static TeamManager get() {
