@@ -2,9 +2,11 @@ package dev.cgs.mc.charity.teams;
 
 import dev.cgs.mc.charity.objectives.Objective;
 import dev.cgs.mc.charity.objectives.Objectives;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.Bukkit;
@@ -14,7 +16,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 
 public class Team implements ConfigurationSerializable {
-  {
+  static {
     ConfigurationSerialization.registerClass(Team.class);
     ConfigurationSerialization.registerClass(UnlockMeta.class);
     ConfigurationSerialization.registerClass(ObjectiveKey.class);
@@ -25,15 +27,34 @@ public class Team implements ConfigurationSerializable {
     Map<String, Object> data = new HashMap<String, Object>();
     data.put("leader", leader.toString());
     data.put("players", players);
-    data.put("objectives", objectives);
     data.put("score", score);
+    List<Map<String, Object>> serializedObjectives = new ArrayList<>();
+    for (Map.Entry<ObjectiveKey, UnlockMeta> entry : objectives.entrySet()) {
+      Map<String, Object> obj = new HashMap<>();
+      obj.put("key", entry.getKey().serialize());
+      obj.put("value", entry.getValue().serialize());
+      serializedObjectives.add(obj);
+    }
+    data.put("objectives", serializedObjectives);
     return data;
   }
 
   public Team(Map<String, Object> data) {
     this.leader = Team.Leader.valueOf((String) data.get("leader"));
     this.players = (Set<OfflinePlayer>) data.get("players");
-    this.objectives = (HashMap<ObjectiveKey, UnlockMeta>) data.get("objectives");
+    this.objectives = new HashMap<>();
+    List<Map<String, Object>> serializedObjectives =
+        (List<Map<String, Object>>) data.get("objectives");
+
+    if (serializedObjectives != null) {
+      for (Map<String, Object> obj : serializedObjectives) {
+        Map<String, Object> keyData = (Map<String, Object>) obj.get("key");
+        Map<String, Object> valueData = (Map<String, Object>) obj.get("value");
+        ObjectiveKey key = new ObjectiveKey(keyData);
+        UnlockMeta value = new UnlockMeta(valueData);
+        objectives.put(key, value);
+      }
+    }
     this.score = (int) data.getOrDefault("score", 0);
     this.onlinePlayers = new HashSet<>();
   }
@@ -61,6 +82,20 @@ public class Team implements ConfigurationSerializable {
       this.key = key;
       this.player = player;
     }
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == null)
+        return false;
+      if (obj.getClass() != this.getClass()) {
+        return false;
+      }
+      final ObjectiveKey other = (ObjectiveKey) obj;
+      if (!other.key.equals(key))
+        return false;
+      if (!(other.player == null && player == null) && !other.player.equals(player))
+        return false;
+      return true;
+    }
 
     public int hashCode() {
       return (player == null ? 0 : player.hashCode() * 31) + key.hashCode();
@@ -70,8 +105,6 @@ public class Team implements ConfigurationSerializable {
   public class UnlockMeta implements ConfigurationSerializable {
     public OfflinePlayer unlockedBy;
     public Date unlockedAt;
-    {
-    }
 
     @Override
     public Map<String, Object> serialize() {
@@ -91,7 +124,7 @@ public class Team implements ConfigurationSerializable {
 
   private Set<OfflinePlayer> players;
   private Set<Player> onlinePlayers;
-  private HashMap<ObjectiveKey, UnlockMeta> objectives;
+  private Map<ObjectiveKey, UnlockMeta> objectives;
   private Leader leader;
   private int score;
 
@@ -131,6 +164,7 @@ public class Team implements ConfigurationSerializable {
   public void assign(Player player) {
     players.add(player);
     onlinePlayers.add(player);
+    Teams.get().saveData();
   }
 
   public void onLogin(Player player) {

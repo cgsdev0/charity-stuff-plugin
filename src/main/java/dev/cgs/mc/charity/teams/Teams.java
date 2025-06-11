@@ -61,7 +61,6 @@ public class Teams implements Listener {
     if (config == null) {
       return;
     }
-    Bukkit.getLogger().info(config.getClass().getName());
     this.teams = (List<Team>) config;
   }
 
@@ -84,6 +83,7 @@ public class Teams implements Listener {
 
     instance = new Teams();
     instance.loadData();
+    instance.saveData();
     CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
     plugin.getServer().getPluginManager().registerEvents(instance, plugin);
   }

@@ -15,5 +15,10 @@ public interface Objective {
     Kind kind();
     /** how many points is it worth? */
     int worth();
+    /**
+     * what advancement is this objective linked to? (Can be found on wiki; make sure it starts
+     * with "minecraft:") *
+     */
+    String advancement() default "";
   }
 }

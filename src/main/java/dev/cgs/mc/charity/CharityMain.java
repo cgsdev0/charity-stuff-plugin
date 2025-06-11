@@ -16,7 +16,9 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -58,11 +60,15 @@ public final class CharityMain extends JavaPlugin {
     Donations.onEnable();
     Objectives.onEnable();
 
+    for (World world : getServer().getWorlds()) {
+      world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+    }
+
     Donations.get().registerEffects(
         // add new effects here
         new HotPotatoEffect(), new SwapEffect(), new RotateEffect());
 
-    Objectives.get().registerObjectives(new MineDiamondObjective());
+    Objectives.get().registerObjectives(new MineDiamondObjective(), new EnchanterObjective());
 
     // register commands for testing / damage control
     new CommandAPICommand("donation")
@@ -91,7 +97,6 @@ public final class CharityMain extends JavaPlugin {
           String objective = (String) args.get("objective");
           Player player = (Player) args.get("player");
           Teams.get().fromPlayer(player).unlock(objective, player);
-          Teams.get().saveData();
         })
         .register();
 
