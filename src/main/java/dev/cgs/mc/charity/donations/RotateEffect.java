@@ -2,6 +2,7 @@ package dev.cgs.mc.charity.donations;
 
 import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.donations.DonationEffect.Tier;
+import dev.cgs.mc.charity.teams.*;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;

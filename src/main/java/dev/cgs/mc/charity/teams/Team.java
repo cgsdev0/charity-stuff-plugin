@@ -120,6 +120,7 @@ public class Team implements ConfigurationSerializable {
     unlock.unlockedBy = who;
     unlock.unlockedAt = new Date();
     objectives.put(key, unlock);
+    Teams.get().saveData();
     Bukkit.getLogger().info(who.getName() + " unlocked " + objective + "!");
   }
 
