@@ -12,18 +12,19 @@ public class RotateEffect extends DonationEffect {
   public void start() {
     CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
     var players = plugin.getServer().getOnlinePlayers();
-    Location last = null;
     Player p = null;
+    Location first = null;
     for (Player player : players) {
       Location next = player.getLocation();
-      if (last != null) {
-        player.teleport(last);
+      if (p != null) {
+        p.teleport(next);
+      } else {
+        first = next;
       }
       p = player;
-      last = next;
     }
     if (p != null) {
-      p.teleport(last);
+      p.teleport(first);
     }
   }
 }
