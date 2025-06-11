@@ -1,7 +1,11 @@
 package dev.cgs.mc.charity.donations;
 
+import dev.cgs.mc.charity.CharityMain;
+import dev.cgs.mc.charity.donations.DonationEffect.Tier;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -27,22 +31,9 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.util.UUID;
-import java.util.ArrayList;
-import java.util.Collection;
 
-import dev.cgs.mc.charity.CharityMain;
-import dev.cgs.mc.charity.Team;
-import dev.cgs.mc.charity.TeamManager;
-import dev.cgs.mc.charity.donations.DonationEffect.Tier;
-
-@DonationEffect.Meta(
-  key="hot-potato",
-  name="Hot Potato",
-  tier=Tier.TIER_2
-)
+@DonationEffect.Meta(key = "hot-potato", name = "Hot Potato", tier = Tier.TIER_2)
 public class HotPotatoEffect extends DonationEffect implements Listener {
-
   private class State {
     public BossBar bossBar;
     public UUID holder;
@@ -57,15 +48,17 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
 
   private static <T> T random(Collection<T> coll) {
     int num = (int) (Math.random() * coll.size());
-    for(T t: coll) if (--num < 0) return t;
+    for (T t : coll)
+      if (--num < 0)
+        return t;
     return null;
-}
+  }
 
   @Override
   public void start() {
     CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
     lock();
-    CraftPlayer player = (CraftPlayer)random(plugin.getServer().getOnlinePlayers());
+    CraftPlayer player = (CraftPlayer) random(plugin.getServer().getOnlinePlayers());
     state.bossBar.setProgress(1.0);
     plugin.getServer().getScheduler().runTaskTimer(plugin, task -> {
       if (state.holder == null) {
@@ -77,7 +70,7 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
       if (new_progress == 0.0) {
         Player p = plugin.getServer().getPlayer(state.holder);
         if (p != null && p instanceof CraftPlayer) {
-          this.explodePlayer((CraftPlayer)p);
+          this.explodePlayer((CraftPlayer) p);
         }
       }
     }, 0L, 1L);
@@ -93,8 +86,10 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
   }
 
   private boolean isPotato(ItemStack stack) {
-    if (stack == null) return false;
-    if (stack.getPersistentDataContainer().getOrDefault(potatoKey, PersistentDataType.BOOLEAN, false)) {
+    if (stack == null)
+      return false;
+    if (stack.getPersistentDataContainer().getOrDefault(
+            potatoKey, PersistentDataType.BOOLEAN, false)) {
       return true;
     }
     return false;
@@ -104,10 +99,9 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
   public void onDrop(PlayerDropItemEvent event) {
     Item dropped = event.getItemDrop();
     if (isPotato(dropped.getItemStack())) {
-        event.setCancelled(true);
-      }
+      event.setCancelled(true);
+    }
   }
-
 
   public void givePotato(CraftPlayer player) {
     state.holder = player.getUniqueId();
@@ -119,9 +113,8 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
     lore.add(POTATO_LORE);
     meta.setLore(lore);
     potato.setItemMeta(meta);
-    potato.editPersistentDataContainer(pdc -> {
-      pdc.set(potatoKey, PersistentDataType.BOOLEAN, true);
-    });
+    potato.editPersistentDataContainer(
+        pdc -> { pdc.set(potatoKey, PersistentDataType.BOOLEAN, true); });
     PlayerInventory inv = player.getInventory();
     ItemStack hand = inv.getItemInMainHand();
     if (hand != null && !hand.isEmpty()) {
@@ -129,8 +122,10 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
       int i = -1;
       for (ItemStack slot : inv) {
         i++;
-        if (i >= 36 && i <= 39) continue;
-        if (slot != null && slot.equals(hand)) continue;
+        if (i >= 36 && i <= 39)
+          continue;
+        if (slot != null && slot.equals(hand))
+          continue;
         if (slot == null || slot.isEmpty()) {
           // swap hand to here
           inv.setItem(i, hand);
@@ -152,8 +147,8 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
     Entity damager = event.getDamager();
     Entity attacked = event.getEntity();
     if (attacked instanceof CraftPlayer && damager instanceof CraftPlayer) {
-      CraftPlayer attacker = (CraftPlayer)damager;
-      CraftPlayer attackee = (CraftPlayer)attacked;
+      CraftPlayer attacker = (CraftPlayer) damager;
+      CraftPlayer attackee = (CraftPlayer) attacked;
       PlayerInventory inv = attacker.getInventory();
       ItemStack hand = inv.getItemInMainHand();
       if (isPotato(hand)) {
@@ -167,43 +162,43 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
   }
 
   public void explodePlayer(CraftPlayer player) {
-      unlock();
-      state.bossBar.removeAll();
-      state.holder = null;
-      PlayerInventory inv = player.getInventory();
-      int i = 0;
-      for(ItemStack is : inv) {
-        if (isPotato(is)) {
-          inv.setItem(i, ItemStack.empty());
-        }
-        i++;
+    unlock();
+    state.bossBar.removeAll();
+    state.holder = null;
+    PlayerInventory inv = player.getInventory();
+    int i = 0;
+    for (ItemStack is : inv) {
+      if (isPotato(is)) {
+        inv.setItem(i, ItemStack.empty());
       }
-      player.getWorld().createExplosion(player, 4.0f, true, false);
-      player.damage(100, DamageSource.builder(DamageType.IN_FIRE).build());
+      i++;
+    }
+    player.getWorld().createExplosion(player, 4.0f, true, false);
+    player.damage(100, DamageSource.builder(DamageType.IN_FIRE).build());
   }
 
   @EventHandler
   public void onEat(PlayerItemConsumeEvent event) {
-      if (isPotato(event.getItem())) {
-        explodePlayer((CraftPlayer)event.getPlayer());
-      }
+    if (isPotato(event.getItem())) {
+      explodePlayer((CraftPlayer) event.getPlayer());
+    }
   }
 
   @EventHandler
-    public void onClick(InventoryClickEvent e) {
-        CraftPlayer p = (CraftPlayer) e.getWhoClicked();
-        Inventory i = e.getInventory();
-        if(isPotato(e.getCurrentItem())) {
-            if(!i.equals(p.getInventory())) {
-                e.setCancelled(true);
-            }
-        }
+  public void onClick(InventoryClickEvent e) {
+    CraftPlayer p = (CraftPlayer) e.getWhoClicked();
+    Inventory i = e.getInventory();
+    if (isPotato(e.getCurrentItem())) {
+      if (!i.equals(p.getInventory())) {
+        e.setCancelled(true);
+      }
     }
+  }
 
-    @EventHandler
-    public void onDrag(InventoryDragEvent e) {
-        if(isPotato(e.getCursor())) {
-            e.setCancelled(true);
-        }
+  @EventHandler
+  public void onDrag(InventoryDragEvent e) {
+    if (isPotato(e.getCursor())) {
+      e.setCancelled(true);
     }
+  }
 }

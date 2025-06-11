@@ -1,20 +1,18 @@
-package dev.cgs.mc.charity;
+package dev.cgs.mc.charity.teams;
 
+import dev.cgs.mc.charity.objectives.Objective;
+import dev.cgs.mc.charity.objectives.ObjectiveManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
-
-import dev.cgs.mc.charity.objectives.Objective;
-import dev.cgs.mc.charity.objectives.ObjectiveManager;
 
 public class Team implements ConfigurationSerializable {
   {
@@ -25,39 +23,36 @@ public class Team implements ConfigurationSerializable {
 
   @Override
   public Map<String, Object> serialize() {
-      Map<String, Object> data = new HashMap<String, Object>();
-      data.put("leader", leader.toString());
-      data.put("players", players);
-      data.put("objectives", objectives);
-      return data;
+    Map<String, Object> data = new HashMap<String, Object>();
+    data.put("leader", leader.toString());
+    data.put("players", players);
+    data.put("objectives", objectives);
+    return data;
   }
 
   public Team(Map<String, Object> data) {
-      this.leader = Team.Leader.valueOf((String)data.get("leader"));
-      this.players = (Set<OfflinePlayer>)data.get("players");
-      this.objectives = (HashMap<ObjectiveKey, UnlockMeta>)data.get("objectives");
+    this.leader = Team.Leader.valueOf((String) data.get("leader"));
+    this.players = (Set<OfflinePlayer>) data.get("players");
+    this.objectives = (HashMap<ObjectiveKey, UnlockMeta>) data.get("objectives");
   }
 
-  public enum Leader {
-    BADCOP,
-    JAKE
-  }
+  public enum Leader { BADCOP, JAKE }
 
   public class ObjectiveKey implements ConfigurationSerializable {
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> data = new HashMap<String, Object>();
-        data.put("key", key);
-        data.put("player", player);
-        return data;
+      Map<String, Object> data = new HashMap<String, Object>();
+      data.put("key", key);
+      data.put("player", player);
+      return data;
     }
 
     public String key;
     public OfflinePlayer player;
 
     public ObjectiveKey(Map<String, Object> data) {
-      this.key = (String)data.get("key");
-      this.player = (OfflinePlayer)data.get("player");
+      this.key = (String) data.get("key");
+      this.player = (OfflinePlayer) data.get("player");
     }
 
     public ObjectiveKey(String key, OfflinePlayer player) {
@@ -78,17 +73,17 @@ public class Team implements ConfigurationSerializable {
 
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> data = new HashMap<String, Object>();
-        data.put("unlockedBy", unlockedBy);
-        data.put("unlockedAt", unlockedAt);
-        return data;
+      Map<String, Object> data = new HashMap<String, Object>();
+      data.put("unlockedBy", unlockedBy);
+      data.put("unlockedAt", unlockedAt);
+      return data;
     }
 
-    public UnlockMeta() { }
+    public UnlockMeta() {}
 
     public UnlockMeta(Map<String, Object> data) {
-      this.unlockedAt = (Date)data.get("unlockedAt");
-      this.unlockedBy = (OfflinePlayer)data.get("unlockedBy");
+      this.unlockedAt = (Date) data.get("unlockedAt");
+      this.unlockedBy = (OfflinePlayer) data.get("unlockedBy");
     }
   }
 

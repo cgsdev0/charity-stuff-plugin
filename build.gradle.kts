@@ -47,6 +47,12 @@ tasks {
   javadoc {
     options.encoding = Charsets.UTF_8.name() // We want UTF-8 for everything
   }
+  runServer {
+    downloadPlugins {
+      modrinth("simple-voice-chat", "bukkit-2.5.30")
+      modrinth("commandapi", "5QpP7QZT")
+    }
+  }
 }
 
 // Configure plugin.yml generation
