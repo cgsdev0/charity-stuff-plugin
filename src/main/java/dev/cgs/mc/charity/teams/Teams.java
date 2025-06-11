@@ -19,13 +19,13 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class TeamManager implements Listener {
-  private static TeamManager instance;
+public class Teams implements Listener {
+  private static Teams instance;
   private File dataFile;
 
   private List<Team> teams;
 
-  private TeamManager() {
+  private Teams() {
     teams = new ArrayList<>();
     teams.add(new Team(Team.Leader.JAKE));
     teams.add(new Team(Team.Leader.BADCOP));
@@ -79,10 +79,10 @@ public class TeamManager implements Listener {
 
   public static void onEnable() {
     if (instance != null) {
-      throw new IllegalStateException("TeamManager is already initialized.");
+      throw new IllegalStateException("Teams is already initialized.");
     }
 
-    instance = new TeamManager();
+    instance = new Teams();
     instance.loadData();
     CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
     plugin.getServer().getPluginManager().registerEvents(instance, plugin);
@@ -104,9 +104,9 @@ public class TeamManager implements Listener {
     team.onQuit(quittingPlayer);
   }
 
-  public static TeamManager get() {
+  public static Teams get() {
     if (instance == null) {
-      throw new IllegalStateException("TeamManager not initialized yet.");
+      throw new IllegalStateException("Teams not initialized yet.");
     }
     return instance;
   }

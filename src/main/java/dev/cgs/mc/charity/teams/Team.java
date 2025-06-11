@@ -1,7 +1,7 @@
 package dev.cgs.mc.charity.teams;
 
 import dev.cgs.mc.charity.objectives.Objective;
-import dev.cgs.mc.charity.objectives.ObjectiveManager;
+import dev.cgs.mc.charity.objectives.Objectives;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -104,7 +104,7 @@ public class Team implements ConfigurationSerializable {
   }
 
   public void unlock(String objective, OfflinePlayer who) {
-    Objective.Meta meta = ObjectiveManager.get().getMeta(objective);
+    Objective.Meta meta = Objectives.get().getMeta(objective);
     ObjectiveKey key = new ObjectiveKey(objective, who);
     if (!players.contains(who)) {
       throw new AssertionError("Player is not on that team!");

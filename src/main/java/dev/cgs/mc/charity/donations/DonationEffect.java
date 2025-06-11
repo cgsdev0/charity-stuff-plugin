@@ -26,12 +26,12 @@ public abstract class DonationEffect {
 
   /** Locks a player for this effect type. They won't receive it again until unlocked **/
   public final void lock() {
-    DonationManager.get().lock(this);
+    Donations.get().lock(this);
   }
 
   /** Unlocks a player for this effect type **/
   public final void unlock() {
-    DonationManager.get().unlock(this);
+    Donations.get().unlock(this);
   }
 
   public abstract void start();

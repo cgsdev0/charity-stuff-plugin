@@ -9,9 +9,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.cgs.mc.charity.CharityMain;
 
-public class ObjectiveManager {
+public class Objectives {
 
-    private static ObjectiveManager instance;
+    private static Objectives instance;
 
     private class AugmentedObjective {
       public Objective objective;
@@ -25,7 +25,7 @@ public class ObjectiveManager {
 
     private HashMap<String, AugmentedObjective> objectives;
 
-    private ObjectiveManager() {
+    private Objectives() {
       objectives = new HashMap<>();
     }
 
@@ -56,14 +56,14 @@ public class ObjectiveManager {
 
     public static void onEnable() {
         if (instance != null) {
-            throw new IllegalStateException("ObjectiveManager is already initialized.");
+            throw new IllegalStateException("Objectives is already initialized.");
         }
-        instance = new ObjectiveManager();
+        instance = new Objectives();
     }
 
-    public static ObjectiveManager get() {
+    public static Objectives get() {
         if (instance == null) {
-            throw new IllegalStateException("ObjectiveManager not initialized yet.");
+            throw new IllegalStateException("Objectives not initialized yet.");
         }
         return instance;
     }

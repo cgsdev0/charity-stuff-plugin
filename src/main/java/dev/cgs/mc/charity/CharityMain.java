@@ -3,9 +3,9 @@ package dev.cgs.mc.charity;
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import dev.cgs.mc.charity.donations.*;
 import dev.cgs.mc.charity.objectives.ExampleObjective;
-import dev.cgs.mc.charity.objectives.ObjectiveManager;
+import dev.cgs.mc.charity.objectives.Objectives;
 import dev.cgs.mc.charity.teams.Team;
-import dev.cgs.mc.charity.teams.TeamManager;
+import dev.cgs.mc.charity.teams.Teams;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
@@ -30,9 +30,9 @@ public final class CharityMain extends JavaPlugin {
 
   @Override
   public void onDisable() {
-    TeamManager.onDisable();
-    DonationManager.onDisable();
-    ObjectiveManager.onDisable();
+    Teams.onDisable();
+    Donations.onDisable();
+    Objectives.onDisable();
 
     if (voicechatPlugin != null) {
       getServer().getServicesManager().unregister(voicechatPlugin);
@@ -54,26 +54,26 @@ public final class CharityMain extends JavaPlugin {
       getLogger().info("Failed to register voicechat plugin");
     }
 
-    TeamManager.onEnable();
-    DonationManager.onEnable();
-    ObjectiveManager.onEnable();
+    Teams.onEnable();
+    Donations.onEnable();
+    Objectives.onEnable();
 
-    DonationManager.get().registerEffects(
+    Donations.get().registerEffects(
         // add new effects here
         new HotPotatoEffect(), new ExampleEffect(), new SwapEffect());
 
-    ObjectiveManager.get().registerObjectives(new ExampleObjective());
+    Objectives.get().registerObjectives(new ExampleObjective());
 
     // register commands for testing / damage control
     new CommandAPICommand("donation")
         .withAliases("d")
         .withPermission(CommandPermission.OP)
         .withArguments(new MultiLiteralArgument(
-            "effect", DonationManager.get().getKeys().toArray(String[] ::new)))
+            "effect", Donations.get().getKeys().toArray(String[] ::new)))
         .executes((sender, args) -> {
           String effect = (String) args.get("effect");
           try {
-            DonationManager.get().start(effect);
+            Donations.get().start(effect);
           } catch (Error e) {
             sender.sendMessage(
                 Component.text().color(NamedTextColor.RED).content(e.getMessage()).build());
@@ -85,13 +85,13 @@ public final class CharityMain extends JavaPlugin {
         .withAliases("o")
         .withPermission(CommandPermission.OP)
         .withArguments(new MultiLiteralArgument(
-            "objective", ObjectiveManager.get().getKeys().toArray(String[] ::new)))
+            "objective", Objectives.get().getKeys().toArray(String[] ::new)))
         .withArguments(new PlayerArgument("player"))
         .executes((sender, args) -> {
           String objective = (String) args.get("objective");
           Player player = (Player) args.get("player");
-          TeamManager.get().fromPlayer(player).unlock(objective, player);
-          TeamManager.get().saveData();
+          Teams.get().fromPlayer(player).unlock(objective, player);
+          Teams.get().saveData();
         })
         .register();
 
@@ -99,11 +99,11 @@ public final class CharityMain extends JavaPlugin {
         new CommandAPICommand("assign")
             .withArguments(new PlayerArgument("player"))
             .withArguments(new MultiLiteralArgument(
-                "team", TeamManager.get().getKeys().toArray(String[] ::new)))
+                "team", Teams.get().getKeys().toArray(String[] ::new)))
             .executes((sender, args) -> {
               Player p = (Player) args.get("player");
               String teamName = (String) args.get("team");
-              Team team = TeamManager.get().fromLeader(Team.Leader.valueOf(teamName));
+              Team team = Teams.get().fromLeader(Team.Leader.valueOf(teamName));
               team.assign(p);
               sender.sendMessage("Success!");
             });

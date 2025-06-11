@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class DonationManager {
-  private static DonationManager instance;
+public class Donations {
+  private static Donations instance;
 
   private class AugmentedEffect {
     public DonationEffect effect;
@@ -30,7 +30,7 @@ public class DonationManager {
 
   private HashMap<String, AugmentedEffect> effects;
 
-  private DonationManager() {
+  private Donations() {
     effects = new HashMap<>();
   }
 
@@ -83,14 +83,14 @@ public class DonationManager {
 
   public static void onEnable() {
     if (instance != null) {
-      throw new IllegalStateException("DonationManager is already initialized.");
+      throw new IllegalStateException("Donations is already initialized.");
     }
-    instance = new DonationManager();
+    instance = new Donations();
   }
 
-  public static DonationManager get() {
+  public static Donations get() {
     if (instance == null) {
-      throw new IllegalStateException("DonationManager not initialized yet.");
+      throw new IllegalStateException("Donations not initialized yet.");
     }
     return instance;
   }
