@@ -1,5 +1,6 @@
 package dev.cgs.mc.charity;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Item;
@@ -14,9 +15,13 @@ import dev.cgs.mc.charity.donations.DonationEffect;
 import dev.cgs.mc.charity.donations.DonationManager;
 import dev.cgs.mc.charity.donations.ExampleEffect;
 import dev.cgs.mc.charity.donations.HotPotatoEffect;
+import dev.cgs.mc.charity.objectives.ExampleObjective;
+import dev.cgs.mc.charity.objectives.ObjectiveManager;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import net.kyori.adventure.text.Component;
@@ -32,6 +37,7 @@ public final class CharityMain extends JavaPlugin {
   public void onDisable() {
     TeamManager.onDisable();
     DonationManager.onDisable();
+    ObjectiveManager.onDisable();
 
     if (voicechatPlugin != null) {
         getServer().getServicesManager().unregister(voicechatPlugin);
@@ -55,6 +61,7 @@ public final class CharityMain extends JavaPlugin {
 
     TeamManager.onEnable();
     DonationManager.onEnable();
+    ObjectiveManager.onEnable();
 
     DonationManager.get().registerEffects(
       // add new effects here
@@ -62,14 +69,15 @@ public final class CharityMain extends JavaPlugin {
       new ExampleEffect()
     );
 
+    ObjectiveManager.get().registerObjectives(
+      new ExampleObjective()
+    );
+
     // register commands for testing / damage control
     new CommandAPICommand("donation")
     .withAliases("d")
     .withPermission(CommandPermission.OP)
-    .withArguments(
-        new StringArgument("effect")
-          .replaceSuggestions(ArgumentSuggestions.strings(DonationManager.get().getKeys()))
-    )
+    .withArguments(new MultiLiteralArgument("effect", DonationManager.get().getKeys().toArray(String[]::new)))
     .executes((sender, args) -> {
         String effect = (String) args.get("effect");
         try {
@@ -85,9 +93,22 @@ public final class CharityMain extends JavaPlugin {
     })
     .register();
 
+    new CommandAPICommand("objective")
+    .withAliases("o")
+    .withPermission(CommandPermission.OP)
+    .withArguments(new MultiLiteralArgument("objective", ObjectiveManager.get().getKeys().toArray(String[]::new)))
+    .withArguments(new PlayerArgument("player"))
+    .executes((sender, args) -> {
+        String objective = (String)args.get("objective");
+        Player player = (Player)args.get("player");
+        TeamManager.get().fromLeader(Team.Leader.JAKE).unlock(objective, player);
+        TeamManager.get().saveData();
+    })
+    .register();
+
     CommandAPICommand teamAssign = new CommandAPICommand("assign")
     .withArguments(new PlayerArgument("player"))
-    .withArguments(new StringArgument("team").replaceSuggestions(ArgumentSuggestions.strings(TeamManager.get().getKeys())))
+    .withArguments(new MultiLiteralArgument("team", TeamManager.get().getKeys().toArray(String[]::new)))
     .executes((sender, args) -> {
       Player p = (Player)args.get("player");
       String teamName = (String)args.get("team");
