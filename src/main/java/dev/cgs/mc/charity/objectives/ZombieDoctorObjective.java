@@ -7,4 +7,4 @@ package dev.cgs.mc.charity.objectives;
   worth = 25,
   advancement = "minecraft:story/cure_zombie_villager"
 )
-public class ZombieDoctorObjective implements Objective {}
+public class ZombieDoctorObjective extends Objective {}

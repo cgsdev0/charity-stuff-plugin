@@ -15,18 +15,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Objectives implements Listener {
   private static Objectives instance;
 
-  private class AugmentedObjective {
-    public Objective objective;
-    public Objective.Meta meta;
-
-    public AugmentedObjective(Objective objective, Objective.Meta meta) {
-      this.objective = objective;
-      this.meta = meta;
-    }
-  }
-
-  private HashMap<String, AugmentedObjective> objectives;
-  private HashMap<String, AugmentedObjective> advancementObjectives;
+  private HashMap<String, Objective> objectives;
+  private HashMap<String, Objective> advancementObjectives;
 
   private Objectives() {
     objectives = new HashMap<>();
@@ -46,10 +36,9 @@ public class Objectives implements Listener {
         throw new RuntimeException(
             "Failed to start the plugin. Please annotate all objective classes.");
       }
-      var augmented = new AugmentedObjective(objective, meta);
-      this.objectives.put(meta.key(), augmented);
+      this.objectives.put(meta.key(), objective);
       if (meta.advancement() != "") {
-        this.advancementObjectives.put(meta.advancement(), augmented);
+        this.advancementObjectives.put(meta.advancement(), objective);
       }
     }
   }
@@ -58,7 +47,7 @@ public class Objectives implements Listener {
   public void onAdvancement(PlayerAdvancementDoneEvent event) {
     Player player = event.getPlayer();
     String key = event.getAdvancement().getKey().toString();
-    AugmentedObjective objective = advancementObjectives.get(key);
+    Objective objective = advancementObjectives.get(key);
     if (objective == null)
       return;
 

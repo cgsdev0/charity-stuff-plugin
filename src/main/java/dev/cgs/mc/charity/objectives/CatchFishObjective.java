@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 @Objective.Meta(
     key = CatchFishObjective.key, name = "Fishing Expert", kind = Objective.Kind.PER_PLAYER, worth = 5)
-public class CatchFishObjective implements Objective, Listener {
+public class CatchFishObjective extends Objective implements Listener {
   public static final String key = "catch_20_fish";
 
   public HashMap<OfflinePlayer, Integer> catches = new HashMap<>();

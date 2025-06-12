@@ -7,4 +7,4 @@ package dev.cgs.mc.charity.objectives;
   worth = 20,
   advancement = "minecraft:nether/brew_potion"
 )
-public class LocalBreweryObjective implements Objective {}
+public class LocalBreweryObjective extends Objective {}

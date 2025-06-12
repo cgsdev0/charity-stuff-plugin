@@ -6,4 +6,4 @@ package dev.cgs.mc.charity.objectives;
   kind = Objective.Kind.PER_TEAM,
   worth = 10
 )
-public class BuildFarmObjective implements Objective {}
+public class BuildFarmObjective extends Objective {}

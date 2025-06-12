@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -26,7 +27,7 @@ public class Team implements ConfigurationSerializable {
   public Map<String, Object> serialize() {
     Map<String, Object> data = new HashMap<String, Object>();
     data.put("leader", leader.toString());
-    data.put("players", players);
+    data.put("players", players.stream().map(player -> player.getUniqueId().toString()).toList());
     data.put("score", score);
     List<Map<String, Object>> serializedObjectives = new ArrayList<>();
     for (Map.Entry<ObjectiveKey, UnlockMeta> entry : objectives.entrySet()) {
@@ -41,7 +42,11 @@ public class Team implements ConfigurationSerializable {
 
   public Team(Map<String, Object> data) {
     this.leader = Team.Leader.valueOf((String) data.get("leader"));
-    this.players = (Set<OfflinePlayer>) data.get("players");
+    var players = (List<String>) data.get("players");
+    this.players = new HashSet<>();
+    for (var p : players) {
+      this.players.add(Bukkit.getOfflinePlayer(UUID.fromString(p)));
+    }
     this.objectives = new HashMap<>();
     List<Map<String, Object>> serializedObjectives =
         (List<Map<String, Object>>) data.get("objectives");
@@ -103,13 +108,13 @@ public class Team implements ConfigurationSerializable {
   }
 
   public class UnlockMeta implements ConfigurationSerializable {
-    public OfflinePlayer unlockedBy;
+    public UUID unlockedBy;
     public Date unlockedAt;
 
     @Override
     public Map<String, Object> serialize() {
       Map<String, Object> data = new HashMap<String, Object>();
-      data.put("unlockedBy", unlockedBy);
+      data.put("unlockedBy", unlockedBy.toString());
       data.put("unlockedAt", unlockedAt);
       return data;
     }
@@ -118,7 +123,7 @@ public class Team implements ConfigurationSerializable {
 
     public UnlockMeta(Map<String, Object> data) {
       this.unlockedAt = (Date) data.get("unlockedAt");
-      this.unlockedBy = (OfflinePlayer) data.get("unlockedBy");
+      this.unlockedBy = UUID.fromString((String) data.get("unlockedBy"));
     }
   }
 
@@ -150,7 +155,7 @@ public class Team implements ConfigurationSerializable {
     }
     score += meta.worth();
     UnlockMeta unlock = new UnlockMeta();
-    unlock.unlockedBy = who;
+    unlock.unlockedBy = who.getUniqueId();
     unlock.unlockedAt = new Date();
     objectives.put(key, unlock);
     Teams.get().saveData();
@@ -162,7 +167,7 @@ public class Team implements ConfigurationSerializable {
   }
 
   public void assign(Player player) {
-    players.add(player);
+    players.add((OfflinePlayer) player);
     onlinePlayers.add(player);
     Teams.get().saveData();
   }

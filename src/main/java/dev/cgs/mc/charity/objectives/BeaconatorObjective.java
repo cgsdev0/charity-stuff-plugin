@@ -7,4 +7,4 @@ package dev.cgs.mc.charity.objectives;
   worth = 100,
   advancement = "minecraft:nether/create_full_beacon"
 )
-public class BeaconatorObjective implements Objective {}
+public class BeaconatorObjective extends Objective {}

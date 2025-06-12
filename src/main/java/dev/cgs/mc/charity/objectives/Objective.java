@@ -1,10 +1,14 @@
 package dev.cgs.mc.charity.objectives;
 
+import dev.cgs.mc.charity.teams.Team;
+import dev.cgs.mc.charity.teams.Teams;
+import org.bukkit.entity.Player;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 // This is a thing that happened because of a donation
-public interface Objective {
+public abstract class Objective {
   public enum Kind { PER_PLAYER, PER_TEAM }
 
   /** put this on top of your Objective classes OR ELSE (it will crash) */
@@ -20,5 +24,22 @@ public interface Objective {
      * with "minecraft:") *
      */
     String advancement() default "";
+  }
+
+  public Objective.Meta meta;
+
+  public Objective() {
+    Class<?> subclass = this.getClass();
+    Objective.Meta meta = subclass.getAnnotation(Objective.Meta.class);
+    if (meta == null) {
+      throw new AssertionError("missing meta annotation!");
+    }
+    this.meta = meta;
+  }
+
+  public void unlock(Player player) {
+    Team t = Teams.get().fromPlayer(player);
+    if (t == null) { return; }
+    t.unlock(meta.key(), player);
   }
 }

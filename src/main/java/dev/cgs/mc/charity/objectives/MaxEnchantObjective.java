@@ -9,7 +9,7 @@ import org.bukkit.event.enchantment.EnchantItemEvent;
 
 @Objective.Meta(
     key = MaxEnchantObjective.key, name = "Lvl 30 Enchant", kind = Objective.Kind.PER_TEAM, worth = 40)
-public class MaxEnchantObjective implements Objective, Listener {
+public class MaxEnchantObjective extends Objective implements Listener {
   public static final String key = "max_enchant";
 
   @EventHandler
@@ -17,9 +17,6 @@ public class MaxEnchantObjective implements Objective, Listener {
     Player p = event.getEnchanter();
     if (event.getExpLevelCost() < 30)
       return;
-    Team t = Teams.get().fromPlayer(p);
-    if (t == null)
-      return;
-    t.unlock(key, p);
+    unlock(p);
   }
 }

@@ -9,9 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDropItemEvent;
 
 @Objective.Meta(
-    key = MineDiamondObjective.key, name = "Diamonds!", kind = Objective.Kind.PER_PLAYER, worth = 2)
-public class MineDiamondObjective implements Objective, Listener {
-  public static final String key = "mine_diamonds";
+    key = "mine_diamonds", name = "Diamonds!", kind = Objective.Kind.PER_PLAYER, worth = 2)
+public class MineDiamondObjective extends Objective implements Listener {
 
   @EventHandler
   public void onBreak(BlockDropItemEvent event) {
@@ -26,9 +25,6 @@ public class MineDiamondObjective implements Objective, Listener {
     // silk touch dont count
     if (event.getItems().get(0).getItemStack().getType() == Material.DIAMOND_ORE)
       return;
-    Team t = Teams.get().fromPlayer(p);
-    if (t == null)
-      return;
-    t.unlock(key, p);
+    unlock(p);
   }
 }

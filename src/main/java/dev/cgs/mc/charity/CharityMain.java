@@ -19,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -44,6 +45,15 @@ public final class CharityMain extends JavaPlugin {
 
   @Override
   public void onEnable() {
+    WorldCreator creator = new WorldCreator("team_selection");
+    creator.generator(new VoidChunkGenerator());
+    creator.environment(World.Environment.NORMAL);
+    World world = creator.createWorld();
+    if (world != null) {
+      world.setSpawnLocation(0, 100, 0);
+      world.getBlockAt(0, 99, 0).setType(Material.BEDROCK);
+    }
+
     // register the voicechanger plugin
     BukkitVoicechatService service =
         getServer().getServicesManager().load(BukkitVoicechatService.class);
@@ -60,36 +70,21 @@ public final class CharityMain extends JavaPlugin {
     Donations.onEnable();
     Objectives.onEnable();
 
-    for (World world : getServer().getWorlds()) {
-      world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-      world.setGameRule(GameRule.KEEP_INVENTORY, true);
+    for (World w : getServer().getWorlds()) {
+      w.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+      w.setGameRule(GameRule.KEEP_INVENTORY, true);
     }
 
     Donations.get().registerEffects(
-      // add new effects here
-      new HotPotatoEffect(),
-      new SwapEffect(),
-      new RotateEffect()
-    );
+        // add new effects here
+        new HotPotatoEffect(), new SwapEffect(), new RotateEffect());
 
-    Objectives.get().registerObjectives(
-      new MineDiamondObjective(),
-      new EnchanterObjective(),
-      new ZombieDoctorObjective(),
-      new LocalBreweryObjective(),
-      new HeroOfVillageObjective(),
-      new CavesAndCliffsObjective(),
-      new HowDidWeGetHereObjective(),
-      new FreeTheEndObjective(),
-      new BeaconatorObjective(),
-      new TrialChamberObjective(),
-      new BuildHouseObjective(),
-      new BuildHeadquartersObjective(),
-      new BuildStableObjective(),
-      new BuildFarmObjective(),
-      new BuildMapWallObjective(),
-      new MaxEnchantObjective(),
-      new CatchFishObjective()
+    Objectives.get().registerObjectives(new MineDiamondObjective(), new EnchanterObjective(),
+        new ZombieDoctorObjective(), new LocalBreweryObjective(), new HeroOfVillageObjective(),
+        new CavesAndCliffsObjective(), new HowDidWeGetHereObjective(), new FreeTheEndObjective(),
+        new BeaconatorObjective(), new TrialChamberObjective(), new BuildHouseObjective(),
+        new BuildHeadquartersObjective(), new BuildStableObjective(), new BuildFarmObjective(),
+        new BuildMapWallObjective(), new MaxEnchantObjective(), new CatchFishObjective()
 
     );
 
@@ -161,5 +156,7 @@ public final class CharityMain extends JavaPlugin {
           });
         })
         .register();
+
+    // Bukkit.getScheduler().runTaskLater(this, () -> { Teams.get().createNPCs(); }, 300L);
   }
 }

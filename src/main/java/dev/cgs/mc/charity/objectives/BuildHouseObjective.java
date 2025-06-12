@@ -6,4 +6,4 @@ package dev.cgs.mc.charity.objectives;
   kind = Objective.Kind.PER_PLAYER,
   worth = 10
 )
-public class BuildHouseObjective implements Objective {}
+public class BuildHouseObjective extends Objective {}

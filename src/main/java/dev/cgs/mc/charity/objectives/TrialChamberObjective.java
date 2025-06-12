@@ -7,4 +7,4 @@ package dev.cgs.mc.charity.objectives;
   worth = 10,
   advancement = "minecraft:adventure/minecraft_trials_edition"
 )
-public class TrialChamberObjective implements Objective {}
+public class TrialChamberObjective extends Objective {}

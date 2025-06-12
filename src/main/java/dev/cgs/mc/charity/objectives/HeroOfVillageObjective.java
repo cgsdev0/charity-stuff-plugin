@@ -7,4 +7,4 @@ package dev.cgs.mc.charity.objectives;
   worth = 30,
   advancement = "minecraft:adventure/hero_of_the_village"
 )
-public class HeroOfVillageObjective implements Objective {}
+public class HeroOfVillageObjective extends Objective {}

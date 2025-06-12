@@ -7,4 +7,4 @@ package dev.cgs.mc.charity.objectives;
   worth = 1000,
   advancement = "minecraft:nether/all_effects"
 )
-public class HowDidWeGetHereObjective implements Objective {}
+public class HowDidWeGetHereObjective extends Objective {}

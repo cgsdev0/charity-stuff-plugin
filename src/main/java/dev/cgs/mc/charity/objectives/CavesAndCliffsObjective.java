@@ -7,4 +7,4 @@ package dev.cgs.mc.charity.objectives;
   worth = 30,
   advancement = "minecraft:adventure/fall_from_world_height"
 )
-public class CavesAndCliffsObjective implements Objective {}
+public class CavesAndCliffsObjective extends Objective {}

@@ -27,6 +27,7 @@ repositories {
     maven(url = "https://repo.codemc.org/repository/maven-public/")
     maven (url = "https://maven.maxhenkel.de/repository/public")
     maven(url = "https://mvn.0110.be/releases")
+    maven("https://repo.fancyinnovations.com/releases")
 }
 
 dependencies {
@@ -36,6 +37,7 @@ dependencies {
   compileOnly("de.maxhenkel.voicechat:voicechat-api:2.5.27")
   implementation("be.tarsos.dsp:core:2.5")
   implementation("be.tarsos.dsp:jvm:2.5")
+  compileOnly("de.oliver:FancyNpcs:2.5.0")
 }
 
 tasks {
@@ -51,6 +53,7 @@ tasks {
     downloadPlugins {
       modrinth("simple-voice-chat", "bukkit-2.5.30")
       modrinth("commandapi", "5QpP7QZT")
+      modrinth("fancynpcs", "4M2WyByT")
     }
   }
 }

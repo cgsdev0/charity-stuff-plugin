@@ -7,4 +7,4 @@ package dev.cgs.mc.charity.objectives;
   worth = 100,
   advancement = "minecraft:end/kill_dragon"
 )
-public class FreeTheEndObjective implements Objective {}
+public class FreeTheEndObjective extends Objective {}

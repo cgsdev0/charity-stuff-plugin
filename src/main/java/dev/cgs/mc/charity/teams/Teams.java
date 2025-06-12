@@ -1,5 +1,9 @@
 package dev.cgs.mc.charity.teams;
 
+import de.oliver.fancynpcs.api.FancyNpcsPlugin;
+import de.oliver.fancynpcs.api.Npc;
+import de.oliver.fancynpcs.api.NpcData;
+import de.oliver.fancynpcs.api.events.NpcsLoadedEvent;
 import dev.cgs.mc.charity.CharityMain;
 import io.papermc.paper.configuration.Configuration;
 import java.io.File;
@@ -7,14 +11,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import me.lucko.spark.paper.common.util.config.FileConfiguration;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -88,12 +97,39 @@ public class Teams implements Listener {
     plugin.getServer().getPluginManager().registerEvents(instance, plugin);
   }
 
+  public void createNPCs() {
+    CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
+    plugin.getLogger().info("SPAWNING NPC");
+    World world = plugin.getServer().getWorld("world");
+
+    Location loc = world.getSpawnLocation();
+    loc.setX(80D);
+    loc.setY(80D);
+    loc.setZ(-240D);
+    NpcData data = new NpcData("badcop", UUID.randomUUID(), loc);
+    data.setSkin("cutecop");
+    data.setDisplayName("<red>badcop</red>");
+    Npc npc = FancyNpcsPlugin.get().getNpcAdapter().apply(data);
+    FancyNpcsPlugin.get().getNpcManager().registerNpc(npc);
+    npc.setSaveToFile(false);
+    npc.create();
+    npc.spawnForAll();
+  }
+
   @EventHandler
-  public void onLogin(PlayerLoginEvent event) {
+  public void onLogin(PlayerJoinEvent event) {
     var joiningPlayer = event.getPlayer();
     var team = fromPlayer(joiningPlayer);
-    if (team != null)
+    if (team != null) {
       team.onLogin(joiningPlayer);
+
+      Bukkit.getLogger().info("found a team... " + team.getLeader().toString());
+    } else {
+      World world = Bukkit.getServer().getWorld("team_selection");
+      Bukkit.getLogger().info("teleproting");
+      joiningPlayer.teleportAsync(world.getSpawnLocation());
+      joiningPlayer.setGameMode(GameMode.ADVENTURE);
+    }
   }
 
   @EventHandler
