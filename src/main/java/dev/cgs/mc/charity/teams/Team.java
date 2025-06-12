@@ -71,7 +71,7 @@ public class Team implements ConfigurationSerializable {
     public Map<String, Object> serialize() {
       Map<String, Object> data = new HashMap<String, Object>();
       data.put("key", key);
-      data.put("player", player);
+      data.put("player", player.getUniqueId().toString());
       return data;
     }
 
@@ -80,7 +80,7 @@ public class Team implements ConfigurationSerializable {
 
     public ObjectiveKey(Map<String, Object> data) {
       this.key = (String) data.get("key");
-      this.player = (OfflinePlayer) data.get("player");
+      this.player = Bukkit.getOfflinePlayer(UUID.fromString((String) data.get("player")));
     }
 
     public ObjectiveKey(String key, OfflinePlayer player) {

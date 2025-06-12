@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
+    "target": "ES2020",
     "outDir": "dist",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "sourceMap": true
   },
   "include": ["src/**/*.ts"]
