@@ -11,7 +11,7 @@ import org.bukkit.event.block.BlockDropItemEvent;
 @Objective.Meta(
     key = MineDiamondObjective.key, name = "Diamonds!", kind = Objective.Kind.PER_PLAYER, worth = 2)
 public class MineDiamondObjective implements Objective, Listener {
-  public static final String key = "mine-diamonds";
+  public static final String key = "mine_diamonds";
 
   @EventHandler
   public void onBreak(BlockDropItemEvent event) {

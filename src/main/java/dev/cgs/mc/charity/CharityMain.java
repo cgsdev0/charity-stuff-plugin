@@ -62,13 +62,36 @@ public final class CharityMain extends JavaPlugin {
 
     for (World world : getServer().getWorlds()) {
       world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+      world.setGameRule(GameRule.KEEP_INVENTORY, true);
     }
 
     Donations.get().registerEffects(
-        // add new effects here
-        new HotPotatoEffect(), new SwapEffect(), new RotateEffect());
+      // add new effects here
+      new HotPotatoEffect(),
+      new SwapEffect(),
+      new RotateEffect()
+    );
 
-    Objectives.get().registerObjectives(new MineDiamondObjective(), new EnchanterObjective());
+    Objectives.get().registerObjectives(
+      new MineDiamondObjective(),
+      new EnchanterObjective(),
+      new ZombieDoctorObjective(),
+      new LocalBreweryObjective(),
+      new HeroOfVillageObjective(),
+      new CavesAndCliffsObjective(),
+      new HowDidWeGetHereObjective(),
+      new FreeTheEndObjective(),
+      new BeaconatorObjective(),
+      new TrialChamberObjective(),
+      new BuildHouseObjective(),
+      new BuildHeadquartersObjective(),
+      new BuildStableObjective(),
+      new BuildFarmObjective(),
+      new BuildMapWallObjective(),
+      new MaxEnchantObjective(),
+      new CatchFishObjective()
+
+    );
 
     // register commands for testing / damage control
     new CommandAPICommand("donation")
