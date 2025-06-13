@@ -19,6 +19,8 @@ fastify.get("/ws", { websocket: true }, function wsHandler(socket, req) {
   const onUpdate = (update: string) => {
     socket.send(update);
   };
+  socket.send(JSON.stringify(objectives));
+  socket.send(JSON.stringify(players));
   socket.send(JSON.stringify(db));
   updateEmitter.on("update", onUpdate);
 
@@ -27,35 +29,64 @@ fastify.get("/ws", { websocket: true }, function wsHandler(socket, req) {
   });
 });
 
-let db = {};
+let db: any = {};
+let objectives: any = {};
+let players: any = {};
 
-const dataSource = "/home/sarah/minecraft-plugins/charity-stuff-plugin/run/plugins/charity-stuff-plugin/data.yml";
+const rootDir = "/home/sarah/minecraft-plugins/charity-stuff-plugin/run";
+const dataSource = `${rootDir}/plugins/charity-stuff-plugin/data.yml`;
+const objectiveSource = `${rootDir}/plugins/charity-stuff-plugin/objectives.yml`;
+const playerSource = `${rootDir}/usercache.json`;
 
-const updateDB = throttle(
-  1000,
-  (initial: boolean) => {
-    console.log(`refreshing DB`);
-    readFile(dataSource, (err, data) => {
-      if (!err) {
-        db = parse(data.toString());
-        updateEmitter.emit("update", JSON.stringify(db));
-        if (initial) {
-          console.log(db);
-        }
-      } else {
-        console.error(err);
-      }
-    });
-  },
-  { noLeading: true },
-);
+const updatePlayers = () => {
+  readFile(playerSource, (err, data) => {
+    if (!err) {
+      const p = JSON.parse(data.toString());
+      players = { type: "players", players: p.map(({ expiresOn, ...rest }) => rest) };
+      updateEmitter.emit("update", JSON.stringify(players));
+    } else {
+      console.error(err);
+    }
+  });
+};
 
-updateDB(true);
-watch(dataSource, (event, filename) => {
-  if (filename) {
-    updateDB(false);
-  }
-});
+const updateData = () => {
+  readFile(dataSource, (err, data) => {
+    if (!err) {
+      const parsed = parse(data.toString());
+      db = { type: "teams", teams: parsed.teams.map(({ ["=="]: _, ...rest }) => rest) };
+      updateEmitter.emit("update", JSON.stringify(db));
+    } else {
+      console.error(err);
+    }
+  });
+};
+
+const updateObjectives = () => {
+  readFile(objectiveSource, (err, data) => {
+    if (!err) {
+      const parsed = parse(data.toString());
+      objectives = { type: "objectives", objectives: parsed };
+      updateEmitter.emit("update", JSON.stringify(objectives));
+    } else {
+      console.error(err);
+    }
+  });
+};
+
+const connectSource = (source: string, update: any) => {
+  update();
+  update = throttle(1000, update, { noLeading: true });
+  watch(source, (_, filename) => {
+    if (filename) {
+      update();
+    }
+  });
+};
+
+connectSource(dataSource, updateData);
+connectSource(playerSource, updatePlayers);
+connectSource(objectiveSource, updateObjectives);
 
 try {
   await fastify.listen({ port: 3009 });

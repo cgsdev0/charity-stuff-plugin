@@ -3,9 +3,13 @@ package dev.cgs.mc.charity.objectives;
 import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.teams.Team;
 import dev.cgs.mc.charity.teams.Teams;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,9 +22,42 @@ public class Objectives implements Listener {
   private HashMap<String, Objective> objectives;
   private HashMap<String, Objective> advancementObjectives;
 
+  private File dataFile;
+
+  private static Map<String, Object> serializeMeta(Objective.Meta meta) {
+    Map<String, Object> data = new HashMap<>();
+    data.put("name", meta.name());
+    data.put("key", meta.key());
+    data.put("worth", meta.worth());
+    data.put("advancement", meta.advancement());
+    data.put("kind", meta.kind().toString());
+    return data;
+  }
+
+  public void saveData() {
+    YamlConfiguration dataConfig = new YamlConfiguration();
+    var stuff = objectives.values().stream().map(obj -> serializeMeta(obj.meta)).toArray();
+    dataConfig.set("objectives", stuff);
+    try {
+      dataConfig.save(dataFile);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   private Objectives() {
     objectives = new HashMap<>();
     advancementObjectives = new HashMap<>();
+    CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
+    dataFile = new File(plugin.getDataFolder(), "objectives.yml");
+    if (!dataFile.exists()) {
+      try {
+        plugin.getDataFolder().mkdirs();
+        dataFile.createNewFile();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   public void registerObjectives(Objective... objectives) {
@@ -41,6 +78,7 @@ public class Objectives implements Listener {
         this.advancementObjectives.put(meta.advancement(), objective);
       }
     }
+    saveData();
   }
 
   @EventHandler

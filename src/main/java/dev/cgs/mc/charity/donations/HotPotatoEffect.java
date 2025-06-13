@@ -2,10 +2,13 @@ package dev.cgs.mc.charity.donations;
 
 import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.donations.DonationEffect.Tier;
+import dev.cgs.mc.charity.teams.Teams;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -56,6 +59,9 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
 
   @Override
   public void start(CharityMain plugin) {
+    Teams.get().playSound(Sound.sound(Key.key("item.firecharge.use"), Sound.Source.MASTER, 1f, 1f),
+        Sound.Emitter.self());
+
     lock();
     CraftPlayer player = (CraftPlayer) random(plugin.getServer().getOnlinePlayers());
     state.bossBar.setProgress(1.0);

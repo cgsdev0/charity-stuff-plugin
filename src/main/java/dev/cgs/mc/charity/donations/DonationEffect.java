@@ -1,13 +1,11 @@
 package dev.cgs.mc.charity.donations;
 
 import dev.cgs.mc.charity.CharityMain;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 // This is a thing that happened because of a donation
 public abstract class DonationEffect {
-
   // TODO: 10% chance of upgrading from neutral -> mild??
   public enum Tier {
     /** Minimal chaos. $1 - $10 donation **/

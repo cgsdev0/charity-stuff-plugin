@@ -11,6 +11,7 @@ import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.PlayerArgument;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -39,11 +40,31 @@ public final class CharityMain extends JavaPlugin {
     WorldCreator creator = new WorldCreator("team_selection");
     creator.generator(new VoidChunkGenerator());
     creator.environment(World.Environment.NORMAL);
-    World world = creator.createWorld();
-    if (world != null) {
-      world.setSpawnLocation(0, 100, 0);
-      world.getBlockAt(0, 99, 0).setType(Material.BEDROCK);
+    World hub = creator.createWorld();
+    if (hub != null) {
+      hub.setPVP(false);
+      hub.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+      hub.setGameRule(GameRule.DO_INSOMNIA, false);
+      hub.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+      hub.setSpawnFlags(false, false);
+      hub.setTime(6000);
+      hub.setSpawnLocation(0, 100, 0);
+      hub.getBlockAt(0, 98, 0).setType(Material.BEDROCK);
     }
+
+    World parkour = creator.createWorld();
+    if (parkour != null) {
+      parkour.setPVP(false);
+      parkour.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+      parkour.setGameRule(GameRule.DO_INSOMNIA, false);
+      parkour.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+      parkour.setSpawnFlags(false, false);
+      parkour.setTime(6000);
+      parkour.setSpawnLocation(0, 1, 0);
+      parkour.getBlockAt(0, 0, 0).setType(Material.BEDROCK);
+    }
+
+    World world = getServer().getWorld("world");
 
     // register the voicechanger plugin
     BukkitVoicechatService service =
@@ -66,21 +87,76 @@ public final class CharityMain extends JavaPlugin {
       w.setGameRule(GameRule.KEEP_INVENTORY, true);
     }
 
+    // clang-format off
+
     Donations.get().registerEffects(
-        // add new effects here
-        new HotPotatoEffect(), new SwapEffect(), new RotateEffect(), new ButterfingersEffect(),
-        new AnvilRainEffect(), new AmongUsEffect(), new SweetToothEffect());
-
-    Objectives.get().registerObjectives(new MineDiamondObjective(), new EnchanterObjective(),
-        new ZombieDoctorObjective(), new LocalBreweryObjective(), new HeroOfVillageObjective(),
-        new CavesAndCliffsObjective(), new HowDidWeGetHereObjective(), new FreeTheEndObjective(),
-        new BeaconatorObjective(), new TrialChamberObjective(), new BuildHouseObjective(),
-        new BuildHeadquartersObjective(), new BuildStableObjective(), new BuildFarmObjective(),
-        new BuildMapWallObjective(), new MaxEnchantObjective(), new CatchFishObjective()
-
+      new HotPotatoEffect(),
+      new SwapEffect(),
+      new RotateEffect(),
+      new ButterfingersEffect(),
+      new AnvilRainEffect(),
+      new AmongUsEffect(),
+      new SweetToothEffect()
     );
 
+    Objectives.get().registerObjectives(
+      new MineDiamondObjective(),
+      new EnchanterObjective(),
+      new ZombieDoctorObjective(),
+      new LocalBreweryObjective(),
+      new HeroOfVillageObjective(),
+      new CavesAndCliffsObjective(),
+      new HowDidWeGetHereObjective(),
+      new FreeTheEndObjective(),
+      new BeaconatorObjective(),
+      new TrialChamberObjective(),
+      new BuildHouseObjective(),
+      new BuildHeadquartersObjective(),
+      new BuildStableObjective(),
+      new BuildFarmObjective(),
+      new BuildMapWallObjective(),
+      new MaxEnchantObjective(),
+      new CatchFishObjective()
+    );
+    // clang-format on
+
     // register commands for testing / damage control
+    new CommandAPICommand("hub")
+        .withPermission(CommandPermission.OP)
+        .withOptionalArguments(new PlayerArgument("player"))
+        .executes((sender, args) -> {
+          Player player = (Player) args.get("player");
+          if (player == null)
+            player = (Player) sender;
+          player.teleportAsync(hub.getSpawnLocation());
+          player.setGameMode(GameMode.ADVENTURE);
+        })
+        .register();
+
+    new CommandAPICommand("parkour")
+        .withPermission(CommandPermission.OP)
+        .withOptionalArguments(new PlayerArgument("player"))
+        .executes((sender, args) -> {
+          Player player = (Player) args.get("player");
+          if (player == null)
+            player = (Player) sender;
+          player.teleportAsync(parkour.getSpawnLocation());
+          player.setGameMode(GameMode.ADVENTURE);
+        })
+        .register();
+
+    new CommandAPICommand("spawn")
+        .withPermission(CommandPermission.OP)
+        .withOptionalArguments(new PlayerArgument("player"))
+        .executes((sender, args) -> {
+          Player player = (Player) args.get("player");
+          if (player == null)
+            player = (Player) sender;
+          player.teleportAsync(world.getSpawnLocation());
+          player.setGameMode(GameMode.SURVIVAL);
+        })
+        .register();
+
     new CommandAPICommand("donation")
         .withAliases("d")
         .withPermission(CommandPermission.OP)
