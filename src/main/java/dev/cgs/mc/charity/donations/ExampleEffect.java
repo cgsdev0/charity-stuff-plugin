@@ -1,5 +1,6 @@
 package dev.cgs.mc.charity.donations;
 
+import dev.cgs.mc.charity.CharityMain;
 import org.bukkit.event.Listener;
 
 import dev.cgs.mc.charity.donations.DonationEffect.Tier;
@@ -11,7 +12,7 @@ import dev.cgs.mc.charity.donations.DonationEffect.Tier;
 )
 public class ExampleEffect extends DonationEffect implements Listener {
   @Override
-  public void start() {
+  public void start(CharityMain plugin) {
     // TODO
   }
 }

@@ -3,29 +3,20 @@ package dev.cgs.mc.charity;
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import dev.cgs.mc.charity.donations.*;
 import dev.cgs.mc.charity.objectives.*;
-import dev.cgs.mc.charity.objectives.Objectives;
 import dev.cgs.mc.charity.teams.Team;
 import dev.cgs.mc.charity.teams.Teams;
-import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.PlayerArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 public final class CharityMain extends JavaPlugin {
   public static final String PLUGIN_ID = "charity_plugin";
@@ -77,7 +68,8 @@ public final class CharityMain extends JavaPlugin {
 
     Donations.get().registerEffects(
         // add new effects here
-        new HotPotatoEffect(), new SwapEffect(), new RotateEffect());
+        new HotPotatoEffect(), new SwapEffect(), new RotateEffect(), new ButterfingersEffect()
+    );
 
     Objectives.get().registerObjectives(new MineDiamondObjective(), new EnchanterObjective(),
         new ZombieDoctorObjective(), new LocalBreweryObjective(), new HeroOfVillageObjective(),
@@ -136,27 +128,5 @@ public final class CharityMain extends JavaPlugin {
         .withPermission(CommandPermission.OP)
         .withSubcommand(teamAssign)
         .register();
-
-    // old stuff
-    new CommandAPICommand("butterfingers")
-        .withPermission(CommandPermission.OP) // Required permissions
-        .executes((sender, args) -> {
-          getServer().getOnlinePlayers().forEach(player -> {
-            ItemStack item = player.getInventory().getItemInMainHand();
-            if (item != null && !item.isEmpty() && item.getType() != Material.POTATO) {
-              Item e =
-                  player.getWorld().dropItem(player.getLocation().add(new Vector(0, 1, 0)), item);
-              e.setPickupDelay(40);
-              e.setThrower(player.getUniqueId());
-              // e.setOwner(player.getUniqueId());
-              e.setVelocity(
-                  (new Vector(0, 0, 0.5)).rotateAroundY(-player.getYaw() * 3.1415926535 / 180.0));
-              player.getInventory().setItemInMainHand(ItemStack.empty());
-            }
-          });
-        })
-        .register();
-
-    // Bukkit.getScheduler().runTaskLater(this, () -> { Teams.get().createNPCs(); }, 300L);
   }
 }

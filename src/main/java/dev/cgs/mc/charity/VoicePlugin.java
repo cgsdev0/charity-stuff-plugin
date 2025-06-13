@@ -1,7 +1,5 @@
 package dev.cgs.mc.charity;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -9,19 +7,14 @@ import javax.annotation.Nullable;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.breakfastquay.rubberband.RubberBandLiveShifter;
 
-import be.tarsos.dsp.AudioEvent;
-import be.tarsos.dsp.PitchShifter;
-import be.tarsos.dsp.io.TarsosDSPAudioFormat;
 import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
-import de.maxhenkel.voicechat.api.audio.AudioConverter;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
 import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;

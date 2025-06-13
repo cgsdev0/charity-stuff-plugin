@@ -3,18 +3,16 @@ package dev.cgs.mc.charity.teams;
 import de.oliver.fancynpcs.api.FancyNpcsPlugin;
 import de.oliver.fancynpcs.api.Npc;
 import de.oliver.fancynpcs.api.NpcData;
-import de.oliver.fancynpcs.api.events.NpcsLoadedEvent;
 import dev.cgs.mc.charity.CharityMain;
-import io.papermc.paper.configuration.Configuration;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import me.lucko.spark.paper.common.util.config.FileConfiguration;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -24,7 +22,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -55,8 +55,7 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
   }
 
   @Override
-  public void start() {
-    CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
+  public void start(CharityMain plugin) {
     lock();
     CraftPlayer player = (CraftPlayer) random(plugin.getServer().getOnlinePlayers());
     state.bossBar.setProgress(1.0);
@@ -78,7 +77,7 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
   }
 
   private final String POTATO_LORE = "It's really hot!";
-  private NamespacedKey potatoKey;
+  public static NamespacedKey potatoKey;
 
   public HotPotatoEffect() {
     CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);

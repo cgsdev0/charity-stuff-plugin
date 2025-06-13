@@ -1,5 +1,6 @@
 package dev.cgs.mc.charity.donations;
 
+import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.donations.DonationEffect.Tier;
 import dev.cgs.mc.charity.teams.Team;
 import dev.cgs.mc.charity.teams.Teams;
@@ -11,7 +12,7 @@ import org.bukkit.entity.Player;
 @DonationEffect.Meta(key = "swap", name = "Swap Position", tier = Tier.TIER_1)
 public class SwapEffect extends DonationEffect {
   @Override
-  public void start() {
+  public void start(CharityMain plugin) {
     Team a = Teams.get().fromLeader(Team.Leader.BADCOP);
     Team b = Teams.get().fromLeader(Team.Leader.JAKE);
 

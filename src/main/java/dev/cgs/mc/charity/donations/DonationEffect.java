@@ -1,5 +1,7 @@
 package dev.cgs.mc.charity.donations;
 
+import dev.cgs.mc.charity.CharityMain;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -34,5 +36,5 @@ public abstract class DonationEffect {
     Donations.get().unlock(this);
   }
 
-  public abstract void start();
+  public abstract void start(CharityMain plugin);
 }

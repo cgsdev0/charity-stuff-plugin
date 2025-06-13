@@ -1,7 +1,5 @@
 package dev.cgs.mc.charity.objectives;
 
-import dev.cgs.mc.charity.teams.Team;
-import dev.cgs.mc.charity.teams.Teams;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

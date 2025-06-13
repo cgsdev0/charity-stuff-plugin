@@ -1,15 +1,9 @@
 package dev.cgs.mc.charity.donations;
 
 import dev.cgs.mc.charity.CharityMain;
-import dev.cgs.mc.charity.teams.Team;
-import io.netty.handler.logging.LogLevel;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -61,10 +55,12 @@ public class Donations {
 
   public void start(String key) {
     AugmentedEffect effect = effects.get(key);
+    CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
+
     if (effect.locked) {
       throw new Error("That effect is locked!");
     }
-    effect.effect.start();
+    effect.effect.start(plugin);
   }
 
   /** Locks a player for this effect type. They won't receive it again until unlocked **/
