@@ -10,11 +10,7 @@ import org.bukkit.util.Vector;
 
 import static dev.cgs.mc.charity.donations.HotPotatoEffect.potatoKey;
 
-@DonationEffect.Meta(
-  key="butterfingers",
-  name="Slippery Fingers",
-  tier=Tier.TIER_1
-)
+@DonationEffect.Meta(key="butterfingers", name="Slippery Fingers", tier=Tier.TIER_1)
 public class ButterfingersEffect extends DonationEffect {
   @Override
   public void start(CharityMain plugin) {

@@ -68,7 +68,7 @@ public final class CharityMain extends JavaPlugin {
 
     Donations.get().registerEffects(
         // add new effects here
-        new HotPotatoEffect(), new SwapEffect(), new RotateEffect(), new ButterfingersEffect()
+        new HotPotatoEffect(), new SwapEffect(), new RotateEffect(), new ButterfingersEffect(), new AnvilRainEffect()
     );
 
     Objectives.get().registerObjectives(new MineDiamondObjective(), new EnchanterObjective(),
