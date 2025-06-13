@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -84,7 +86,6 @@ public class Team implements ConfigurationSerializable {
       if (!playerKey.isEmpty()) {
         this.player = Bukkit.getOfflinePlayer(UUID.fromString(playerKey));
       }
-
     }
 
     public ObjectiveKey(String key, OfflinePlayer player) {
@@ -174,6 +175,9 @@ public class Team implements ConfigurationSerializable {
     players.add((OfflinePlayer) player);
     onlinePlayers.add(player);
     Teams.get().saveData();
+    Location l = Bukkit.getServer().getWorld("world").getSpawnLocation();
+    player.teleport(l);
+    player.setGameMode(GameMode.SURVIVAL);
   }
 
   public void onLogin(Player player) {

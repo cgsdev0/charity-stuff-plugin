@@ -19,6 +19,9 @@ public class SwapEffect extends DonationEffect {
     ArrayList<Player> listA = new ArrayList<>(a.getOnlinePlayers());
     ArrayList<Player> listB = new ArrayList<>(b.getOnlinePlayers());
 
+    if (listA.isEmpty() || listB.isEmpty())
+      return;
+
     Player randomPlayerA = listA.get(ThreadLocalRandom.current().nextInt(listA.size()));
     Player randomPlayerB = listB.get(ThreadLocalRandom.current().nextInt(listB.size()));
 
