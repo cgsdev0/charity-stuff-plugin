@@ -5,7 +5,7 @@ import dev.cgs.mc.charity.donations.DonationEffect.Tier;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
+import java.util.List;
 
 @DonationEffect.Meta(key = "sweettooth", name = "Sweet Tooth", tier = Tier.TIER_1)
 public class SweetToothEffect extends DonationEffect {
@@ -18,14 +18,6 @@ public class SweetToothEffect extends DonationEffect {
       ItemStack.of(Material.PUMPKIN_PIE, 16)
     };
 
-    onlinePlayers.forEach(player -> {
-      HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(desserts);
-
-      if(!leftover.isEmpty()) {
-        for(ItemStack item : leftover.values()) {
-          player.getWorld().dropItemNaturally(player.getLocation(), item);
-        }
-      }
-    });
+    onlinePlayers.forEach(player -> player.give(List.of(desserts), true));
   }
 }

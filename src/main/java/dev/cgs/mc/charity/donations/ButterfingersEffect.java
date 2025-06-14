@@ -45,22 +45,3 @@ public class ButterfingersEffect extends DonationEffect {
     return new Vector(0, 0, 0.5).rotateAroundY(-player.getYaw() * Math.PI / 180.0);
   }
 }
-
-//new CommandAPICommand("butterfingers")
-//        .withPermission(CommandPermission.OP) // Required permissions
-//        .executes((sender, args) -> {
-//getServer().getOnlinePlayers().forEach(player -> {
-//ItemStack item = player.getInventory().getItemInMainHand();
-//            if (item != null && !item.isEmpty() && item.getType() != Material.POTATO) {
-//Item e =
-//  player.getWorld().dropItem(player.getLocation().add(new Vector(0, 1, 0)), item);
-//              e.setPickupDelay(40);
-//              e.setThrower(player.getUniqueId());
-//  // e.setOwner(player.getUniqueId());
-//  e.setVelocity(
-//                  (new Vector(0, 0, 0.5)).rotateAroundY(-player.getYaw() * 3.1415926535 / 180.0));
-//  player.getInventory().setItemInMainHand(ItemStack.empty());
-//  }
-//  });
-//  })
-//  .register();

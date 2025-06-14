@@ -8,7 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
+import java.util.List;
 
 @DonationEffect.Meta(key="doggo", name="Man's Best Friend", tier=Tier.TIER_1)
 public class MansBestFriendEffect extends DonationEffect {
@@ -18,16 +18,10 @@ public class MansBestFriendEffect extends DonationEffect {
     ItemStack bones = ItemStack.of(Material.BONE, 5);
 
     onlinePlayers.forEach(player -> {
-      Location playerLoc = player.getLocation();
-      HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(bones);
+      Location spawnLoc = player.getLocation().add(player.getLocation().getDirection().multiply(1.5).setY(0));
 
-      player.getWorld().spawnEntity(playerLoc, EntityType.WOLF);
-
-      if(!leftover.isEmpty()) {
-        for(ItemStack item : leftover.values()) {
-          player.getWorld().dropItemNaturally(playerLoc, item);
-        }
-      }
+      player.getWorld().spawnEntity(spawnLoc, EntityType.WOLF);
+      player.give(List.of(bones), true);
     });
   }
 }
