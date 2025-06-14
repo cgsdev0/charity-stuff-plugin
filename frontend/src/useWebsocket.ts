@@ -29,25 +29,20 @@ export const useWebsocket = (env: "production" | "auto") => {
       }
       const innerWs = new WebSocket(connStr);
 
-      innerWs.onopen = () => {
-        console.log("ws open");
-      };
-
       innerWs.onmessage = (e: any) => {
-        console.log("ws message");
         try {
           const data: any = JSON.parse(e.data);
           setKey(data.type, data.data);
-          console.log("Got data", data);
         } catch (e) {
           console.error(e);
         }
       };
 
       innerWs.onclose = () => {
-        console.log(`on close - ${!shouldConnect ? "not " : " "}reconnecting`);
         if (shouldConnect) {
-          ws = conjunctionJunction();
+          setTimeout(() => {
+            ws = conjunctionJunction();
+          }, 5000);
         }
       };
 

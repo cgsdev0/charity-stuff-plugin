@@ -72,7 +72,7 @@ const updateObjectives = () => {
   readFile(objectiveSource, (err, data) => {
     if (!err) {
       const parsed = parse(data.toString());
-      objectives = { type: "objectives", data: parsed };
+      objectives = { type: "objectives", data: parsed.objectives };
       updateEmitter.emit("update", JSON.stringify(objectives));
     } else {
       console.error(err);

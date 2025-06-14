@@ -12,15 +12,15 @@ export interface Player {
 export interface Team {
   leader: "JAKE" | "BADCOP";
   score: number;
-  players: string[]; // UUID only
+  players: string[]; // UUIDs
   objectives: Array<{
     value: {
-      unlockedBy: string;
+      unlockedBy?: string; // UUID
       unlockedAt: string;
     };
     key: {
       key: string;
-      player: string; // UUID or empty string
+      player?: string; // UUID
     };
   }>;
 }
@@ -36,15 +36,28 @@ export interface Objective {
 export const useStore = create(
   combine(
     {
-      players: [] as Player[],
+      players: {} as Record<string, string>,
       teams: [] as Team[],
-      objectives: [] as Objective[],
+      objectives: {} as Record<string, Objective>,
     },
     (set) => ({
-      setKey: <T extends keyof Magic<typeof set>>(key: T, data: Magic<typeof set>[T]) =>
+      setKey: (key: keyof Magic<typeof set>, data: any) =>
         set(
           produce((state) => {
-            state[key] = data;
+            switch (key) {
+              case "players":
+                (data as Player[]).forEach((player) => {
+                  state.players[player.uuid] = player.name;
+                });
+                break;
+              case "objectives":
+                (data as Objective[]).forEach((obj) => {
+                  state.objectives[obj.key] = obj;
+                });
+                break;
+              default:
+                state[key] = data;
+            }
           }),
         ),
     }),
