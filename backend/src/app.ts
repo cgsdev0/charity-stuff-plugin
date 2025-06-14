@@ -33,7 +33,7 @@ let db: any = {};
 let objectives: any = {};
 let players: any = {};
 
-const rootDir = "/home/sarah/minecraft-plugins/charity-stuff-plugin/run";
+const rootDir = process.env.ROOT_DIR || "/home/sarah/minecraft-plugins/charity-stuff-plugin/run";
 const dataSource = `${rootDir}/plugins/charity-stuff-plugin/data.yml`;
 const objectiveSource = `${rootDir}/plugins/charity-stuff-plugin/objectives.yml`;
 const playerSource = `${rootDir}/usercache.json`;
