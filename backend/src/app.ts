@@ -38,12 +38,18 @@ const dataSource = `${rootDir}/plugins/charity-stuff-plugin/data.yml`;
 const objectiveSource = `${rootDir}/plugins/charity-stuff-plugin/objectives.yml`;
 const playerSource = `${rootDir}/usercache.json`;
 
+let oldPlayers = "";
 const updatePlayers = () => {
   readFile(playerSource, (err, data) => {
     if (!err) {
       const p = JSON.parse(data.toString());
-      players = { type: "players", players: p.map(({ expiresOn, ...rest }) => rest) };
-      updateEmitter.emit("update", JSON.stringify(players));
+      players = { type: "players", data: p.map(({ expiresOn, ...rest }) => rest) };
+      const newPlayers = JSON.stringify(players);
+      // length is a perfectly acceptable checksum in many cultures
+      if (oldPlayers.length !== newPlayers.length) {
+        updateEmitter.emit("update", newPlayers);
+        oldPlayers = newPlayers;
+      }
     } else {
       console.error(err);
     }
@@ -54,7 +60,7 @@ const updateData = () => {
   readFile(dataSource, (err, data) => {
     if (!err) {
       const parsed = parse(data.toString());
-      db = { type: "teams", teams: parsed.teams.map(({ ["=="]: _, ...rest }) => rest) };
+      db = { type: "teams", data: parsed.teams.map(({ ["=="]: _, ...rest }) => rest) };
       updateEmitter.emit("update", JSON.stringify(db));
     } else {
       console.error(err);
@@ -66,7 +72,7 @@ const updateObjectives = () => {
   readFile(objectiveSource, (err, data) => {
     if (!err) {
       const parsed = parse(data.toString());
-      objectives = { type: "objectives", objectives: parsed };
+      objectives = { type: "objectives", data: parsed };
       updateEmitter.emit("update", JSON.stringify(objectives));
     } else {
       console.error(err);
@@ -76,10 +82,10 @@ const updateObjectives = () => {
 
 const connectSource = (source: string, update: any) => {
   update();
-  update = throttle(1000, update, { noLeading: true });
+  let throttled = throttle(1000, update, { noLeading: true });
   watch(source, (_, filename) => {
     if (filename) {
-      update();
+      throttled();
     }
   });
 };

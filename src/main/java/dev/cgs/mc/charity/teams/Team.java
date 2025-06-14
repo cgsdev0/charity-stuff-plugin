@@ -126,9 +126,11 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
       final ObjectiveKey other = (ObjectiveKey) obj;
       if (!other.key.equals(key))
         return false;
-      if (!(other.player == null && player == null) && !other.player.equals(player))
-        return false;
-      return true;
+      if (other.player == null && player == null)
+        return true;
+      if (other.player.equals(player))
+        return true;
+      return false;
     }
 
     public int hashCode() {
