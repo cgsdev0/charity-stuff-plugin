@@ -52,6 +52,9 @@ public final class CharityMain extends JavaPlugin {
       hub.getBlockAt(0, 98, 0).setType(Material.BEDROCK);
     }
 
+    creator = new WorldCreator("parkour");
+    creator.generator(new VoidChunkGenerator());
+    creator.environment(World.Environment.NORMAL);
     World parkour = creator.createWorld();
     if (parkour != null) {
       parkour.setPVP(false);
