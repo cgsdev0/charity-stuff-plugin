@@ -66,7 +66,7 @@ public final class CharityMain extends JavaPlugin {
 
     World world = getServer().getWorld("world");
 
-    // register the voicechanger plugin
+    // register the voice changer plugin
     BukkitVoicechatService service =
         getServer().getServicesManager().load(BukkitVoicechatService.class);
     if (service != null) {
@@ -96,7 +96,9 @@ public final class CharityMain extends JavaPlugin {
       new ButterfingersEffect(),
       new AnvilRainEffect(),
       new AmongUsEffect(),
-      new SweetToothEffect()
+      new SweetToothEffect(),
+      new SmiteEffect(),
+      new MansBestFriendEffect()
     );
 
     Objectives.get().registerObjectives(

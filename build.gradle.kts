@@ -35,7 +35,7 @@ dependencies {
   compileOnly("dev.jorel:commandapi-bukkit-core:10.0.1")
   implementation("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
   compileOnly("de.maxhenkel.voicechat:voicechat-api:2.5.27")
-  compileOnly("de.oliver:FancyNpcs:2.5.0")
+  compileOnly("de.oliver:FancyNpcs:2.5.2")
   compileOnly("de.oliver:FancyHolograms:2.5.0")
 }
 
@@ -52,7 +52,7 @@ tasks {
     downloadPlugins {
       modrinth("simple-voice-chat", "bukkit-2.5.30")
       modrinth("commandapi", "5QpP7QZT")
-      modrinth("fancynpcs", "VjiwM3Y5")
+      modrinth("fancynpcs", "7xfV86kn")
       modrinth("fancyholograms", "Bv4RYBhS")
     }
   }
