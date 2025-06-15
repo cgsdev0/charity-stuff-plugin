@@ -103,6 +103,7 @@ public class WaterGunEffect extends DonationEffect implements Listener {
                 ItemStack damaged = item.damage(1, p);
                 if (damaged.isEmpty()) {
                   this.cancel();
+                  return;
                 }
               }
               spawnWaterBeam(p);
