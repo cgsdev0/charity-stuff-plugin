@@ -92,7 +92,7 @@ public class WaterGunEffect extends DonationEffect implements Listener {
         @Override
         public void run() {
           try {
-            if (mysticArrow.equals(p.getInventory().getItem(9))) {
+            if (ticks == 0 && mysticArrow.equals(p.getInventory().getItem(9))) {
               p.getInventory().setItem(9, realItem);
             }
             if (!p.isHandRaised()) {
