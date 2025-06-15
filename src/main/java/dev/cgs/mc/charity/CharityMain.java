@@ -103,7 +103,8 @@ public final class CharityMain extends JavaPlugin {
       new SmiteEffect(),
       new MansBestFriendEffect(),
       new WaterGunEffect(),
-      new OneHealthEffect()
+      new OneHealthEffect(),
+      new SharedHealthbarEffect()
     );
 
     Objectives.get().registerObjectives(

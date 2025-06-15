@@ -50,6 +50,11 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
   }
 
   @Override
+  public int hashCode() {
+    return this.leader.hashCode();
+  }
+
+  @Override
   public Map<String, Object> serialize() {
     Map<String, Object> data = new HashMap<String, Object>();
     data.put("leader", leader.toString());
