@@ -22,7 +22,12 @@ public abstract class DonationEffect {
     String key();
     String name();
     Tier tier();
+    /** Use this if you need to share the lock with other effects. **/
     String mutex() default "";
+    /** Supress the 3 warning dings for this effect. **/
+    boolean no_warning() default false;
+    /** Don't show the default title text for this effect. **/
+    boolean no_title() default false;
   }
 
   /** Locks a player for this effect type. They won't receive it again until unlocked **/
