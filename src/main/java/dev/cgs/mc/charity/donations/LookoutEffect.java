@@ -19,6 +19,7 @@ public class LookoutEffect extends DonationEffect {
       Vector direction = playerLoc.getDirection();
       direction.setY(0).normalize();
       Location behindYou = playerLoc.clone().subtract(direction);
+
       player.playSound(
         Sound.sound(Key.key("entity.creeper.primed"), Sound.Source.MASTER, 1f, 0.5f),
         behindYou.x(), behindYou.y(), behindYou.z()
