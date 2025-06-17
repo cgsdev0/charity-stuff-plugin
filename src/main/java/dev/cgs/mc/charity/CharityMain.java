@@ -8,12 +8,14 @@ import dev.cgs.mc.charity.teams.Teams;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.OfflinePlayerArgument;
 import dev.jorel.commandapi.arguments.PlayerArgument;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
@@ -201,15 +203,21 @@ public final class CharityMain extends JavaPlugin {
 
     CommandAPICommand teamAssign =
         new CommandAPICommand("assign")
-            .withArguments(new PlayerArgument("player"))
+            .withArguments(new OfflinePlayerArgument("player"))
             .withArguments(
                 new MultiLiteralArgument("team", Teams.get().getKeys().toArray(String[] ::new)))
             .executes((sender, args) -> {
-              Player p = (Player) args.get("player");
+              OfflinePlayer p = (OfflinePlayer) args.get("player");
               String teamName = (String) args.get("team");
               Team team = Teams.get().fromLeader(Team.Leader.valueOf(teamName));
-              team.assign(p);
-              sender.sendMessage("Success!");
+              if (p.isOnline()) {
+                Player onlinePlayer = getServer().getPlayer(p.getUniqueId());
+                team.assign(onlinePlayer);
+                sender.sendMessage("Added online player!");
+              } else {
+                team.assignOffline(p);
+                sender.sendMessage("Added offline player!");
+              }
             });
 
     new CommandAPICommand("teams")

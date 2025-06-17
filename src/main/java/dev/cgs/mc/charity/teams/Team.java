@@ -198,7 +198,7 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
     Bukkit.getLogger().info(who.getName() + " unlocked " + objective + "!");
   }
 
-  public boolean hasPlayer(Player player) {
+  public boolean hasPlayer(OfflinePlayer player) {
     return this.players.contains(player);
   }
 
@@ -279,10 +279,8 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
     }
     player.playSound(
         Sound.sound(Key.key("entity.firework_rocket.launch"), Sound.Source.MASTER, 1f, 1f));
-    players.add((OfflinePlayer) player);
     onlinePlayers.add(player);
-    Teams.get().saveData();
-    Teams.get().updateRecruiters();
+    assignOffline(player);
     Teams.get().sendMessage(Component.text(player.getName())
             .append(Component.text(" has joined " + leader.toString().toLowerCase() + "'s team!")
                     .color(NamedTextColor.LIGHT_PURPLE)));
@@ -291,8 +289,23 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
     player.setGameMode(GameMode.SURVIVAL);
   }
 
+  public void assignOffline(OfflinePlayer player) {
+    if (Teams.get().fromPlayer(player) != null) {
+      return;
+    }
+    players.add(player);
+    Teams.get().saveData();
+    Teams.get().updateRecruiters();
+  }
+
   public void onLogin(Player player) {
     onlinePlayers.add(player);
+    String worldName = player.getLocation().getWorld().getName();
+    if (worldName.equals("team_selection")) {
+      Location l = Bukkit.getServer().getWorld("world").getSpawnLocation();
+      player.teleport(l);
+      player.setGameMode(GameMode.SURVIVAL);
+    }
   }
 
   public void onQuit(Player player) {

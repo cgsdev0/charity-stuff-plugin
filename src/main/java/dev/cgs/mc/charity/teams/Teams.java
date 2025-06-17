@@ -16,6 +16,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -84,7 +85,7 @@ public class Teams implements Listener, ForwardingAudience {
     this.teams = (List<Team>) config;
   }
 
-  public Team fromPlayer(Player player) {
+  public Team fromPlayer(OfflinePlayer player) {
     return teams.stream().filter(team -> team.hasPlayer(player)).findFirst().orElse(null);
   }
 
@@ -138,11 +139,8 @@ public class Teams implements Listener, ForwardingAudience {
     var team = fromPlayer(joiningPlayer);
     if (team != null) {
       team.onLogin(joiningPlayer);
-
-      Bukkit.getLogger().info("found a team... " + team.getLeader().toString());
     } else {
       World world = Bukkit.getServer().getWorld("team_selection");
-      Bukkit.getLogger().info("teleproting");
       joiningPlayer.teleportAsync(world.getSpawnLocation());
       joiningPlayer.setGameMode(GameMode.ADVENTURE);
     }
