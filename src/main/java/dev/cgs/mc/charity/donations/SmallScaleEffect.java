@@ -54,7 +54,7 @@ public class SmallScaleEffect extends DonationEffect implements Listener {
             Sound.Emitter.self());
         updatePlayerAttrs(player, 1.0);
       });
-    }, 20 * 60 * 10); // 10 minutes
+    }, 20 * 60 * 5); // 5 minutes
   }
 
   @EventHandler

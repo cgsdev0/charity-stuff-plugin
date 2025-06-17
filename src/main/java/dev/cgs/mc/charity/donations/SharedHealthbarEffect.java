@@ -31,7 +31,7 @@ public class SharedHealthbarEffect extends DonationEffect implements Listener {
     Bukkit.getScheduler().runTaskLater(plugin, () -> {
       states.clear();
       unlock();
-    }, 20 * 60 * 10); // 10 minutes
+    }, 20 * 60 * 7); // 7 minutes
   }
 
   @EventHandler

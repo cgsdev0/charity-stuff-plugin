@@ -65,7 +65,7 @@ public class BigScaleEffect extends DonationEffect implements Listener {
             Sound.Emitter.self());
         updatePlayerAttrs(player, 0.0);
       });
-    }, 20 * 60 * 10); // 10 minutes
+    }, 20 * 60 * 5); // 5 minutes
   }
 
   @EventHandler

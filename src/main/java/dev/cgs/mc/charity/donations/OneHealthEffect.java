@@ -51,7 +51,7 @@ public class OneHealthEffect extends DonationEffect implements Listener {
         var attribute = a.getAttribute(Attribute.MAX_HEALTH);
         attribute.setBaseValue(20D);
       });
-    }, 20 * 60 * 10); // 10 minutes
+    }, 20 * 60 * 7); // 7 minutes
   }
 
   @EventHandler

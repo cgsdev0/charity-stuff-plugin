@@ -10,6 +10,7 @@ import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.OfflinePlayerArgument;
 import dev.jorel.commandapi.arguments.PlayerArgument;
+import java.util.stream.Stream;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.GameMode;
@@ -185,6 +186,16 @@ public final class CharityMain extends JavaPlugin {
             sender.sendMessage(
                 Component.text().color(NamedTextColor.RED).content(e.getMessage()).build());
           }
+        })
+        .register();
+
+    new CommandAPICommand("tier")
+        .withPermission(CommandPermission.OP)
+        .withArguments(new MultiLiteralArgument("tier",
+            Stream.of(DonationEffect.Tier.values()).map(Enum::name).toArray(String[] ::new)))
+        .executes((sender, args) -> {
+          String tier = (String) args.get("tier");
+          Donations.get().queue(DonationEffect.Tier.valueOf(tier));
         })
         .register();
 
