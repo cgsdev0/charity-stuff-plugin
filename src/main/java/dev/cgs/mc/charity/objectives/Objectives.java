@@ -31,6 +31,7 @@ public class Objectives implements Listener {
     data.put("worth", meta.worth());
     data.put("advancement", meta.advancement());
     data.put("kind", meta.kind().toString());
+    data.put("description", meta.desc().toString());
     return data;
   }
 
