@@ -108,7 +108,8 @@ public final class CharityMain extends JavaPlugin {
       new LookoutEffect(),
       new ALilToTheLeftEffect(),
       new BigScaleEffect(),
-      new SmallScaleEffect()
+      new SmallScaleEffect(),
+      new TimeSlowEffect()
     );
 
     Objectives.get().registerObjectives(
