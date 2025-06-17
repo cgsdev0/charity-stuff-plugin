@@ -52,7 +52,7 @@ public class SmallScaleEffect extends DonationEffect implements Listener {
       onlinePlayers.forEach(player -> {
         player.playSound(Sound.sound(Key.key("entity.item.pickup"), Sound.Source.MASTER, 1f, 0.6f),
             Sound.Emitter.self());
-        updatePlayerAttrs(player, 0.0);
+        updatePlayerAttrs(player, 1.0);
       });
     }, 20 * 60 * 10); // 10 minutes
   }
