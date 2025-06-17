@@ -1,6 +1,9 @@
 import "./App.css";
 import { useWebsocket } from "./useWebsocket";
 import { DebugView } from "./DebugView";
+import { PrimeReactProvider } from "primereact/api";
+import { GoalsList } from "./GoalsList";
+import 'primeicons/primeicons.css';
 
 function App() {
   useWebsocket("production");
@@ -15,7 +18,13 @@ function App() {
           <img src="overlay.png" />
         </div>
       ) : (
-        <DebugView />
+        <PrimeReactProvider>
+          {/* <DebugView /> */}
+          <div className="container" style={{padding: "20px", gap: "20px", width: "100%", height: "100%", justifyContent: "space-around"}}>
+            <GoalsList teamName="BADCOP" />
+            <GoalsList teamName="JAKE" />
+          </div>
+        </PrimeReactProvider>
       )}
     </>
   );

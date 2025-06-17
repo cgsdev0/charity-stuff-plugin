@@ -1,6 +1,24 @@
+body {
+  background: #111827;
+}
+
 .container {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.p-datatable-wrapper {
+  border-radius: 20px 20px 0 0;
+}
+.p-datatable-footer {
+  border-radius: 0 0 20px 20px;
+  border-width: 0;
+}
+
+.vcontainer {
+  display: flex;
+  flex-direction: column;
 }
 
 .overlay {
