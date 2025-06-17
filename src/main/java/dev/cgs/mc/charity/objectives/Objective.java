@@ -2,10 +2,9 @@ package dev.cgs.mc.charity.objectives;
 
 import dev.cgs.mc.charity.teams.Team;
 import dev.cgs.mc.charity.teams.Teams;
-import org.bukkit.entity.Player;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import org.bukkit.entity.Player;
 
 // This is a thing that happened because of a donation
 public abstract class Objective {
@@ -24,6 +23,10 @@ public abstract class Objective {
      * with "minecraft:") *
      */
     String advancement() default "";
+    /**
+     * maybe we can do these ones automatically if they are tied to an advancement
+     */
+    String desc() default "";
   }
 
   public Objective.Meta meta;
@@ -39,7 +42,9 @@ public abstract class Objective {
 
   public void unlock(Player player) {
     Team t = Teams.get().fromPlayer(player);
-    if (t == null) { return; }
+    if (t == null) {
+      return;
+    }
     t.unlock(meta.key(), player);
   }
 }

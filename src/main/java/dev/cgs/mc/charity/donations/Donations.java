@@ -3,6 +3,7 @@ package dev.cgs.mc.charity.donations;
 import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.teams.Teams;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
@@ -68,15 +69,33 @@ public class Donations {
   /** Locks a player for this effect type. They won't receive it again until unlocked **/
   public final void lock(DonationEffect effect) {
     DonationEffect.Meta meta = effect.getClass().getAnnotation(DonationEffect.Meta.class);
+    String mutex = meta.mutex();
     String key = meta.key();
     effects.get(key).locked = true;
+    // lock any effects that share our mutex
+    if (!mutex.isEmpty()) {
+      for (var e : effects.values()) {
+        if (e.meta.mutex().equals(mutex)) {
+          e.locked = true;
+        }
+      }
+    }
   }
 
   /** Unlocks a player for this effect type **/
   public final void unlock(DonationEffect effect) {
     DonationEffect.Meta meta = effect.getClass().getAnnotation(DonationEffect.Meta.class);
+    String mutex = meta.mutex();
     String key = meta.key();
     effects.get(key).locked = false;
+    // unlock any effects that share our mutex
+    if (!mutex.isEmpty()) {
+      for (var e : effects.values()) {
+        if (e.meta.mutex().equals(mutex)) {
+          e.locked = false;
+        }
+      }
+    }
   }
 
   public static void onEnable() {

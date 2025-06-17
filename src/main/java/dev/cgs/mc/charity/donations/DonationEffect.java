@@ -22,6 +22,7 @@ public abstract class DonationEffect {
     String key();
     String name();
     Tier tier();
+    String mutex() default "";
   }
 
   /** Locks a player for this effect type. They won't receive it again until unlocked **/

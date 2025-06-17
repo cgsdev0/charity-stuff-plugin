@@ -106,7 +106,9 @@ public final class CharityMain extends JavaPlugin {
       new OneHealthEffect(),
       new SharedHealthbarEffect(),
       new LookoutEffect(),
-      new ALilToTheLeftEffect()
+      new ALilToTheLeftEffect(),
+      new BigScaleEffect(),
+      new SmallScaleEffect()
     );
 
     Objectives.get().registerObjectives(
