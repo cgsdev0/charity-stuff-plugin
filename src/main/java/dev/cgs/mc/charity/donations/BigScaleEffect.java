@@ -27,6 +27,7 @@ public class BigScaleEffect extends DonationEffect implements Listener {
     double rangeModifier = 4.5 * (1.0 + growth);
     double jumpModifier = 0.42 * (1.0 + growth);
     double safeFallModifier = 3.0 * (1.0 + growth);
+    double speedModifier = 0.1 * (1.0 + growth);
     VoicePlugin.setPitchScale(player.getUniqueId(), pitch);
     var a = (Attributable) player;
     a.getAttribute(Attribute.SCALE).setBaseValue(growth * maxSize + 1.0);
@@ -34,6 +35,7 @@ public class BigScaleEffect extends DonationEffect implements Listener {
     a.getAttribute(Attribute.BLOCK_INTERACTION_RANGE).setBaseValue(rangeModifier);
     a.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(jumpModifier);
     a.getAttribute(Attribute.SAFE_FALL_DISTANCE).setBaseValue(safeFallModifier);
+    a.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(speedModifier);
   }
   @Override
   public void start(CharityMain plugin) {
