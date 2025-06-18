@@ -3,6 +3,7 @@ import { useWebsocket } from "./useWebsocket";
 import { PrimeReactProvider } from "primereact/api";
 import { GoalsList } from "./GoalsList";
 import "primeicons/primeicons.css";
+import { Footer } from "./Footer";
 
 function App() {
   useWebsocket("production");
@@ -14,6 +15,7 @@ function App() {
           <GoalsList teamName="BADCOP" />
           <GoalsList teamName="JAKE" />
         </div>
+        <Footer />
       </PrimeReactProvider>
     </>
   );
