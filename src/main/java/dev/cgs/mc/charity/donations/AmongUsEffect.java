@@ -57,9 +57,11 @@ public class AmongUsEffect extends DonationEffect implements Listener {
     for (int i = 0; i < list.size(); i++) {
       Player p = list.get(i);
       if (i == idx) {
-        p.showTitle(Title.title(Component.text("imposter"), Component.text("sus")));
+        p.showTitle(
+            Title.title(Component.text("Imposter"), Component.text("Betray your allies to win")));
       } else {
-        p.showTitle(Title.title(Component.text("crewmate"), Component.text("survive")));
+        p.showTitle(Title.title(
+            Component.text("Crewmate"), Component.text("There is 1 imposter on your team")));
       }
     }
   }

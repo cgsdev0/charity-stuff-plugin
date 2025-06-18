@@ -132,7 +132,14 @@ public final class CharityMain extends JavaPlugin {
       new BuildFarmObjective(),
       new BuildMapWallObjective(),
       new MaxEnchantObjective(),
-      new CatchFishObjective()
+      new CatchFishObjective(),
+      new FullIronObjective(),
+      new FishEnchantedObjective(),
+      new GlowberryObjective(),
+      new WitherObjective(),
+      new WardenObjective(),
+      new TridentObjective(),
+      new HeartOfTheSeaObjective()
     );
     // clang-format on
 

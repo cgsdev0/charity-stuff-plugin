@@ -25,6 +25,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -195,11 +196,42 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
     unlock.unlockedAt = new Date();
     objectives.put(key, unlock);
     Teams.get().saveData();
-    Bukkit.getLogger().info(who.getName() + " unlocked " + objective + "!");
+    String teamName = this.toString();
+    teamName = Character.toLowerCase(teamName.charAt(0)) + teamName.substring(1);
+    Bukkit.getServer().sendMessage(Component.text(who.getName())
+            .append(Component.text(" completed "))
+            .append(Component.text("[" + meta.name() + "]")
+                    .color(NamedTextColor.GREEN)
+                    .hoverEvent(HoverEvent.showText(Component.text(meta.desc()))))
+            .append(Component.text(" for "))
+            .append(Component.text(teamName).color(this.getColor()))
+            .append(Component.text("! (+"))
+            .append(Component.text(String.valueOf(meta.worth()) + " points)")));
   }
 
   public boolean hasPlayer(OfflinePlayer player) {
     return this.players.contains(player);
+  }
+
+  public NamedTextColor getColor() {
+    switch (this.leader) {
+      case Leader.JAKE:
+        return NamedTextColor.GOLD;
+      case Leader.BADCOP:
+        return NamedTextColor.BLUE;
+    }
+    return NamedTextColor.GRAY;
+  }
+
+  @Override
+  public String toString() {
+    switch (this.leader) {
+      case Leader.JAKE:
+        return "Team JakeCreates";
+      case Leader.BADCOP:
+        return "Team badcop";
+    }
+    return "";
   }
 
   public void updateRecruiter(boolean standing) {
@@ -213,14 +245,7 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
       HologramData hologramData = hologram.getData();
       if (hologramData instanceof TextHologramData textData) {
         List<String> lines = new ArrayList<>();
-        switch (this.leader) {
-          case Leader.JAKE:
-            lines.add("Team JakeCreates");
-            break;
-          case Leader.BADCOP:
-            lines.add("Team badcop");
-            break;
-        }
+        lines.add(this.toString());
         lines.add("");
         int count = players.size();
         lines.add(String.valueOf(count) + (count == 1 ? " Player" : " Players"));
