@@ -57,18 +57,18 @@ export function GoalsList({ teamName }: { teamName: string }) {
     
     return (
         <div className="vcontainer">
-            <h2 className="text-center" style={{textAlign: "center"}}>{teamName} Goals</h2>
-            <DataTable value={Goals} footer={footer} expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate} >
-                <Column expander style={{width: '3em'}} />
-                <Column field="name" header="Goal" style={{padding: '8px', width: '190px', height:'50px', textWrap: 'nowrap'}} body={(rowData) => (
+            <h2 className="text-center">{teamName} Goals</h2>
+            <DataTable value={Goals} footer={footer} expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)} rowExpansionTemplate={rowExpansionTemplate}>
+                <Column expander className="toggle-arrow"/>
+                <Column field="name" header="Goal" className="goal-column" body={(rowData) => (
                     <div>
-                        {rowData.kind === 'PER_TEAM' && <span className="pi pi-users" style={{marginRight: '5px'}}></span>}
-                        {rowData.kind === 'PER_PLAYER' && <span className="pi pi-user" style={{marginRight: '5px'}}></span>}
+                        {rowData.kind === 'PER_TEAM' && <span className="pi pi-users" data-pr-tooltip="Team"></span>}
+                        {rowData.kind === 'PER_PLAYER' && <span className="pi pi-user" data-pr-tooltip="Individual"></span>}
                         <span>{rowData.name}</span>
                     </div>
                 )} />
-                <Column field="points" header="Points" style={{padding: '8px', width: '130px', height:'50px'}} />
-                <Column field="unlocked" header="By" body={(rowData) => (
+                <Column field="points" header="Points" className="points-column"/>
+                <Column field="unlocked" header="By" className="unlocked-column" body={(rowData) => (
                     <div>
                         <AvatarGroup>
                             {rowData.by.map((player: string, index: number) => {
@@ -90,8 +90,9 @@ export function GoalsList({ teamName }: { teamName: string }) {
                     </div>
                     
                     
-                )} style={{padding: '8px', width: '130px', height:'50px'}} />
+                )}/>
             </DataTable>
+            <Tooltip target=".pi" position="top"/>
         </div>
     );
 }
