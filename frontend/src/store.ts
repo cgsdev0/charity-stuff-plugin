@@ -33,12 +33,20 @@ export interface Objective {
   worth: number;
 }
 
+export interface Stream {
+  user_id: string;
+  user_login: string;
+  display_name: string;
+  profile_image_url: string;
+}
+
 export const useStore = create(
   combine(
     {
       players: {} as Record<string, string>,
       teams: [] as Team[],
       objectives: {} as Record<string, Objective>,
+      streams: [] as Stream[],
     },
     (set) => ({
       setKey: (key: keyof Magic<typeof set>, data: any) =>
