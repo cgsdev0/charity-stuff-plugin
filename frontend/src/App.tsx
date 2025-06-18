@@ -20,7 +20,7 @@ function App() {
       ) : (
         <PrimeReactProvider>
           {/* <DebugView /> */}
-          <div className="container" style={{padding: "20px", gap: "20px", width: "100%", height: "100%", justifyContent: "space-around"}}>
+          <div className="container">
             <GoalsList teamName="BADCOP" />
             <GoalsList teamName="JAKE" />
           </div>

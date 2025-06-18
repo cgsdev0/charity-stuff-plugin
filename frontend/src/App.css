@@ -6,19 +6,34 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  padding: 20px;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+}
+
+.goal-column {
+  padding: 8px;
+  width: 190px;
+  height: 50px;
+  text-wrap: nowrap;
 }
 
 .p-datatable-wrapper {
   border-radius: 20px 20px 0 0;
 }
+
 .p-datatable-footer {
   border-radius: 0 0 20px 20px;
   border-width: 0;
 }
 
-.vcontainer {
-  display: flex;
-  flex-direction: column;
+.points-column,
+.unlocked-column {
+  padding: 8px;
+  width: 130px;
+  height: 50px;
 }
 
 .overlay {
@@ -26,6 +41,7 @@ body {
   height: 1080px;
   overflow: hidden;
 }
+
 .overlay * {
   position: absolute;
   top: 0;
@@ -35,4 +51,21 @@ body {
 .overlay iframe {
   border: 0;
   top: 1px;
+}
+
+.pi {
+  margin-right: 5px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.toggle-arrow {
+  width: 3em;
+}
+
+.vcontainer {
+  display: flex;
+  flex-direction: column;
 }
