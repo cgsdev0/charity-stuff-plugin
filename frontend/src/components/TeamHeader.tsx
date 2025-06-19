@@ -19,10 +19,10 @@ export function TeamHeader({ teamName, alignment }: { teamName: string; alignmen
         <h2 style={{ color: "white", marginTop: "0px" }}>{teamName}</h2>
         <div style={{ height: 32, display: "flex", flexWrap: "wrap", gap: "5px", alignItems: "center", justifyContent: alignment }}>
           {playerNames.map((player) => (
-            <>
-              <Avatar key={player} image={`https://mc-heads.net/avatar/${player}`} size="normal" data-pr-tooltip={player} />
+            <span key={player}>
+              <Avatar image={`https://mc-heads.net/avatar/${player}`} size="normal" data-pr-tooltip={player} />
               <Tooltip target={`[data-pr-tooltip=${player}]`} position={alignment == "flex-start" ? "right" : "left"} />
-            </>
+            </span>
           ))}
         </div>
       </div>
