@@ -1,5 +1,5 @@
 import { Avatar } from "primereact/avatar";
-import { Tooltip } from "primereact/tooltip";
+import { AvatarGroup } from "primereact/avatargroup";
 
 export interface Goal {
     name: string;
@@ -23,16 +23,18 @@ export function GoalCard({ goal }: { goal: Goal }) {
             </div>
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                 <span>{goal.description}</span>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: '2px', alignItems: "center", justifyContent: "flex-end" }}>
+                <AvatarGroup>
                     {goal.by.slice(0, 3).map((player) => (
                         <Avatar
                             key={player}
                             image={`https://mc-heads.net/avatar/${player}`}
                             size="normal" 
                             data-pr-tooltip={player}
+                            style={{ borderRadius: "0"}}
                         />
                     ))}
-                </div>
+                    {goal.by.length > 3 && <Avatar label={`+${goal.by.length - 3}`} size="normal" style={{ borderRadius: "0"}} />}
+                </AvatarGroup>
             </div>
         </div>
     )
