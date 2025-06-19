@@ -16,6 +16,7 @@ export function GoalsList({ teamName }: { teamName: string }) {
       unlockedBy = finishedGoal.map((goal) => {
         return players[goal.value.unlockedBy];
       });
+      console.log(objective.key, unlockedBy);
     }
     const goal: Goal = {
       name: objective.name,
