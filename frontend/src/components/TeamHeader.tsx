@@ -1,5 +1,5 @@
 import { Avatar } from "primereact/avatar";
-import { useStore } from "./store";
+import { useStore } from "../store.ts";
 import { useShallow } from "zustand/shallow";
 import { Tooltip } from "primereact/tooltip";
 

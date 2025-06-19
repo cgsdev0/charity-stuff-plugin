@@ -3,7 +3,7 @@ import { useWebsocket } from "./useWebsocket";
 import { PrimeReactProvider } from "primereact/api";
 import "primeicons/primeicons.css";
 import { Footer } from "./components/Footer.tsx";
-import { TeamHeader } from "./TeamHeader.tsx";
+import { TeamHeader } from "./components/TeamHeader.tsx";
 import { GoalsList } from "./components/GoalsList.tsx";
 import {ScoreGauge} from "./components/ScoreGauge.tsx";
 
