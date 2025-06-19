@@ -1,6 +1,6 @@
 import { useStore } from "../store.ts";
 import { useShallow } from "zustand/shallow";
-import { GoalCard, type Goal } from "./GoalCard.tsx"
+import { GoalCard, type Goal } from "./GoalCard.tsx";
 
 export function GoalsList({ teamName }: { teamName: string }) {
   const { players, objectives } = useStore();
@@ -14,8 +14,8 @@ export function GoalsList({ teamName }: { teamName: string }) {
     if (finishedGoal.length > 0) {
       unlocked = true;
       unlockedBy = finishedGoal.map((goal) => {
-        return players[goal.value.unlockedBy]
-      })
+        return players[goal.value.unlockedBy];
+      });
     }
     const goal: Goal = {
       name: objective.name,
@@ -37,9 +37,9 @@ export function GoalsList({ teamName }: { teamName: string }) {
   });
 
   return (
-    <div className="grid-container" style={{ overflowY: "auto", height: "80%", scrollbarColor: "#ffffff #00000000" }}>
+    <div className="grid-container" style={{ overflowY: "auto", scrollbarColor: "#ffffff #00000000" }}>
       {Goals.map((goal) => (
-        <GoalCard goal={goal} key={goal.id}/>
+        <GoalCard goal={goal} key={goal.id} />
       ))}
     </div>
   );
