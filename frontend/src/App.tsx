@@ -5,6 +5,7 @@ import "primeicons/primeicons.css";
 import { Footer } from "./components/Footer.tsx";
 import { TeamHeader } from "./TeamHeader.tsx";
 import { GoalsList } from "./components/GoalsList.tsx";
+import {ScoreGauge} from "./components/ScoreGauge.tsx";
 
 function App() {
   useWebsocket("production");
@@ -20,9 +21,10 @@ function App() {
           <div className="half" style={{ background: "linear-gradient(to bottom, #02a8f8, #5b24e3)", display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
             <TeamHeader teamName="BADCOP" alignment="flex-end" />
             <GoalsList teamName="BADCOP" />
-            <Footer /> 
           </div>
         </div>
+        <Footer/>
+        <ScoreGauge/>
       </PrimeReactProvider>
     </>
   );

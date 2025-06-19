@@ -7,6 +7,6 @@ export function TeamScore({teamName}: { teamName: string}) {
   const score = team?.score || 0;
 
   return (
-    <NumberFlow value={score} />
+    <NumberFlow value={score} className= "team-score"/>
   )
 }

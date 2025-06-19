@@ -28,6 +28,7 @@ body {
 .grid-container {
   display: grid;
   padding: 20px;
+  margin-top: 35px;
   gap: 20px;
   width: 100%;
   height: 100%;
@@ -43,6 +44,10 @@ body {
 
 .gauge-needle {
   transition: transform 0.2s;
+}
+
+.number-flow-react::part(integer) {
+  font-size: 75px;
 }
 
 .p-datatable-wrapper {
@@ -80,6 +85,16 @@ body {
 
 .pi {
   margin-right: 5px;
+}
+
+.score-gauge {
+  position: relative;
+  text-align: center;
+}
+
+.team-score {
+  font-size: 70px;
+  width: 200px;
 }
 
 .text-center {
