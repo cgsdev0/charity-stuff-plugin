@@ -16,8 +16,8 @@ export function TeamHeader({ teamName, alignment }: { teamName: string, alignmen
 
     return (
         <>
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: alignment, maxWidth: "400px" }}>
-                <h2 style={{color: "white"}}>{teamName}</h2>
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: alignment, maxWidth: "400px", padding: "20px" }}>
+                <h2 style={{color: "white", marginTop: "0px"}}>{teamName}</h2>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: '5px', alignItems: "center", justifyContent: alignment }}> 
                     {playerNames.map((player) => (
                         <>
@@ -27,7 +27,7 @@ export function TeamHeader({ teamName, alignment }: { teamName: string, alignmen
                                 size="normal" 
                                 data-pr-tooltip={player}
                             />
-                            <Tooltip target={`[data-pr-tooltip=${player}]`} position="top" />
+                            <Tooltip target={`[data-pr-tooltip=${player}]`} position={alignment == "flex-start" ? "right" : "left"} />
                         </>
                     ))}
                 </div>
