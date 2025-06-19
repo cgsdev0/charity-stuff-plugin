@@ -9,11 +9,6 @@ body {
   background: #111827;
 }
 
-.half {
-  width: 50dvw;
-  height: 100dvh;
-}
-
 .container {
   display: flex;
   flex-direction: row;
@@ -46,8 +41,31 @@ body {
   transition: transform 0.2s;
 }
 
+.half {
+  display: flex;
+  flex-direction: column;
+  width: 50dvw;
+  height: 100dvh;
+
+  &.badcop-half {
+    background: linear-gradient(to bottom, #02a8f8, #5b24e3);
+    align-items: flex-end;
+  }
+
+  &.jake-half {
+    background: linear-gradient(to top, #ed0852, #fe9902);
+    align-items: flex-start;
+  }
+}
+
 .number-flow-react::part(integer) {
   font-size: 75px;
+}
+
+.main {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
 }
 
 .p-datatable-wrapper {
