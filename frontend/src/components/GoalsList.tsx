@@ -12,11 +12,12 @@ export function GoalsList({ teamName }: { teamName: string }) {
     let unlockedBy: string[] = [];
     let unlocked: boolean = false;
     if (finishedGoal.length > 0) {
-      unlocked = true;
+      if (objective.kind === "PER_TEAM") {
+        unlocked = true;
+      }
       unlockedBy = finishedGoal.map((goal) => {
         return players[goal.value.unlockedBy];
       });
-      console.log(objective.key, unlockedBy);
     }
     const goal: Goal = {
       name: objective.name,
@@ -29,12 +30,15 @@ export function GoalsList({ teamName }: { teamName: string }) {
     };
     return goal;
   });
-  // Sort : unlocked first, then by points
+
   Goals.sort((a, b) => {
-    if (a.unlocked === b.unlocked) {
+    if (a.unlocked !== b.unlocked) {
+      return a.unlocked ? 1 : -1;
+    }
+    if (a.points !== b.points) {
       return a.points - b.points;
     }
-    return a.unlocked ? 1 : -1;
+    return a.id.localeCompare(b.id);
   });
 
   return (

@@ -13,7 +13,7 @@ export interface Goal {
 
 export function GoalCard({ goal }: { goal: Goal }) {
   return (
-    <div className="goal-card">
+    <div className={`goal-card ${goal.unlocked ? "unlocked" : ""}`}>
       <div className="col">
         <span className="name">{goal.name}</span>
         <span className="description">{goal.description}</span>
@@ -25,28 +25,30 @@ export function GoalCard({ goal }: { goal: Goal }) {
           ))}
         </div>
         <span className="points">
+          {goal.by.length > 0 && goal.kind === "PER_PLAYER" && <span className="combo">{goal.by.length}x</span>}
           {goal.points}
-          {goal.by.length > 0 && <Badge amount={goal.by.length} />}
+          {/*goal.by.length > 0 && goal.kind === "PER_PLAYER" && <Sticker amount={goal.by.length} />*/}
         </span>
       </div>
     </div>
   );
 }
 
-function Badge({ amount }: { amount: number }) {
+function Sticker({ amount }: { amount: number }) {
   return (
     <span
       style={{
         color: "white",
         backgroundColor: "red",
         border: "solid 2px white",
-        padding: "1px 7px",
+        padding: "0px 6px",
         borderRadius: "8px",
         fontSize: "12px",
-        transform: "rotate(15deg)",
+        transform: "rotate(12deg)",
         position: "absolute",
-        right: "-10px",
-        top: "-4px",
+        right: "-16px",
+        lineHeight: "initial",
+        top: "-2px",
       }}
     >
       X{amount.toString()}

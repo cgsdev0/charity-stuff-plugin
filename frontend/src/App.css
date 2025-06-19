@@ -194,7 +194,6 @@ body {
 }
 
 .goal-card {
-  position: relative;
   background-color: #ffffff50;
   border-radius: 15px;
   padding: 10px;
@@ -224,14 +223,28 @@ body {
     height: 1rem;
   }
   .points {
+    position: relative;
     font-size: 28px;
     flex-grow: 1;
     display: flex;
     align-items: flex-end;
+    line-height: 28px;
   }
   .heads {
     margin-top: 4px;
     display: flex;
     gap: 2px;
   }
+  .combo {
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+.unlocked {
+  opacity: 0.5;
+}
+
+.p-avatar img {
+  image-rendering: pixelated;
 }
