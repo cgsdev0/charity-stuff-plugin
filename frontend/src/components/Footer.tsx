@@ -13,7 +13,7 @@ export function Footer() {
 
 function Streamer(props: { stream: Stream }) {
   return (
-    <a href={`https://twitch.tv/${props.stream.user_login}`}>
+    <a target="_blank" href={`https://twitch.tv/${props.stream.user_login}`}>
       <div className="twitch-avatar">
         <img src={props.stream.profile_image_url} />
       </div>
