@@ -25,8 +25,8 @@ export function GoalCard({ goal }: { goal: Goal }) {
           ))}
         </div>
         <span className="points">
-          {goal.by.length > 0 && goal.kind === "PER_PLAYER" && <span className="combo">{goal.by.length}x</span>}
           {goal.points}
+          {goal.by.length > 0 && goal.kind === "PER_PLAYER" && <span className="combo">x{goal.by.length}</span>}
           {/*goal.by.length > 0 && goal.kind === "PER_PLAYER" && <Sticker amount={goal.by.length} />*/}
         </span>
       </div>
