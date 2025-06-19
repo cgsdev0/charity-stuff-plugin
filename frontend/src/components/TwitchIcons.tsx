@@ -1,13 +1,13 @@
 import { useStore, type Stream } from "../store.ts";
 
-export function Footer() {
+export function TwitchIcons() {
   const { streams } = useStore();
   return (
-    <div className="footer">
+    <>
       {streams.map((stream) => (
         <Streamer key={stream.user_id} stream={stream} />
       ))}
-    </div>
+    </>
   );
 }
 

@@ -32,7 +32,7 @@ export function ScoreGauge() {
 
   return (
     <div className="score-gauge">
-      <TeamScore teamName="JAKE" />
+      <TeamScore score={jakeScore} side="right" />
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 423 240" width="320" height="170">
         <g>
           <path d="M211.5,8C324.031,8 407.207,83.639 422.832,196.17 C428.282,235.425 324.031,204.803 211.5,204.803 C98.969,204.803 -5.282,235.425 0.168,196.17 C15.793,83.639 98.969,8 211.5,8 Z" fill="#ffffff70" stroke="#000" strokeWidth="1" />
@@ -40,7 +40,7 @@ export function ScoreGauge() {
           <path className="gauge-needle" d="M205.11,205.491L208.5,31.392 C208.5,31.392 214.89,205.639 214.89,205.639 Z" fill="#000" stroke="#000" strokeWidth="2" style={{ transformOrigin: "211.5px 208px", transform: `rotate(${needleAngle}deg)` }} />
         </g>
       </svg>
-      <TeamScore teamName="BADCOP" />
+      <TeamScore score={badcopScore} side="left" />
     </div>
   );
 }

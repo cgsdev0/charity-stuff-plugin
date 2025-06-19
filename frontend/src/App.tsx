@@ -2,10 +2,10 @@ import "./App.css";
 import { useWebsocket } from "./useWebsocket";
 import { PrimeReactProvider } from "primereact/api";
 import "primeicons/primeicons.css";
-import { Footer } from "./components/Footer.tsx";
 import { TeamHeader } from "./components/TeamHeader.tsx";
 import { GoalsList } from "./components/GoalsList.tsx";
 import { ScoreGauge } from "./components/ScoreGauge.tsx";
+import { TwitchIcons } from "./components/TwitchIcons.tsx";
 
 function App() {
   useWebsocket("production");
@@ -13,20 +13,24 @@ function App() {
   return (
     <>
       <PrimeReactProvider>
-        <div className="vmain">
-          <div className="main">
-            <div className="half jake-half">
-              <TeamHeader teamName="JAKE" alignment="flex-start" />
-              <GoalsList teamName="JAKE" />
-            </div>
-            <div className="half badcop-half">
-              <TeamHeader teamName="BADCOP" alignment="flex-end" />
-              <GoalsList teamName="BADCOP" />
-            </div>
-          </div>
-          <Footer />
+        <div className="background">
+          <div className="jake"></div>
+          <div className="badcop"></div>
         </div>
-        <ScoreGauge />
+        <div className="main">
+          <header>
+            <TeamHeader teamName="JAKE" alignment="flex-start" />
+            <ScoreGauge />
+            <TeamHeader teamName="BADCOP" alignment="flex-end" />
+          </header>
+          <section className="goals">
+            <GoalsList teamName="JAKE" />
+            <GoalsList teamName="BADCOP" />
+          </section>
+          <footer>
+            <TwitchIcons />
+          </footer>
+        </div>
       </PrimeReactProvider>
     </>
   );

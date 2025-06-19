@@ -1,13 +1,15 @@
 html,
-body {
-  width: 100%;
-  height: 100%;
+body,
+#root {
+  width: 100dvw;
+  height: 100dvh;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 body {
-  background: #111827;
+  background: transparent;
 }
 
 .container {
@@ -24,11 +26,11 @@ body {
 .grid-container {
   display: grid;
   padding: 20px;
-  margin-top: 60px;
   gap: 20px;
   width: 100%;
   height: 100%;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  overflow-y: auto;
 }
 
 .goal-column {
@@ -42,20 +44,26 @@ body {
   transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.half {
+.background {
+  position: absolute;
+  z-index: -1;
   display: flex;
-  flex-direction: column;
-  width: 50dvw;
-  height: calc(100vh - 70px);
+  flex-direction: row;
+  width: 100dvw;
+  height: 100dvh;
+  /* right: 0; */
+  /* bottom: 0; */
 
-  &.badcop-half {
+  & div {
+    width: 50dvw;
+    height: 100dvh;
+  }
+  .badcop {
     background: linear-gradient(to bottom, #02a8f8, #5b24e3);
-    align-items: flex-end;
   }
 
-  &.jake-half {
+  .jake {
     background: linear-gradient(to top, #ed0852, #fe9902);
-    align-items: flex-start;
   }
 }
 
@@ -63,26 +71,38 @@ body {
   font-size: 75px;
 }
 
-.vmain {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-}
 .main {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  height: 100vh;
+
+  header {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-direction: row;
+  }
+
+  section.goals {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    min-height: 0;
+  }
+
+  footer {
+    background-color: #00000080;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 6px;
+  }
 }
 
 .p-datatable-wrapper {
   border-radius: 20px 20px 0 0;
-}
-
-.footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  gap: 6px;
 }
 
 .points-column,
@@ -114,9 +134,20 @@ body {
 }
 
 .score-gauge {
-  position: relative;
   text-align: center;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .team-score {
