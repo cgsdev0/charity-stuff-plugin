@@ -1,4 +1,4 @@
-import { useStore } from "./store";
+import { useStore } from "../store.ts";
 import { DataTable, type DataTableExpandedRows, type DataTableValueArray } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Avatar } from "primereact/avatar";
@@ -100,7 +100,7 @@ export function GoalsList({ teamName }: { teamName: string }) {
           )}
         />
       </DataTable>
-      <Tooltip target=".pi" position="top" />
+      <Tooltip target=".pi" position="top"/>
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import "./App.css";
 import { useWebsocket } from "./useWebsocket";
 import { PrimeReactProvider } from "primereact/api";
-import { GoalsList } from "./GoalsList";
+import { GoalsList } from "./components/GoalsList.tsx";
 import "primeicons/primeicons.css";
-import { Footer } from "./Footer";
+import { Footer } from "./components/Footer.tsx";
 
 function App() {
   useWebsocket("production");

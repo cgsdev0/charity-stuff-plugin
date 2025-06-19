@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import { HashRouter, Route, Routes } from "react-router";
-import { Overlay } from "./Overlay.tsx";
+import { Overlay } from "./components/Overlay.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

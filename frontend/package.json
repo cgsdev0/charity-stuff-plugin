@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "immer": "^10.1.1",
-    "number-flow": "^0.5.8",
+    "@number-flow/react": "^0.5.10",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.6",
     "react": "^19.1.0",

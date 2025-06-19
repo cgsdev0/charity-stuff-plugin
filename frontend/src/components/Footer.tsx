@@ -1,4 +1,4 @@
-import { useStore, type Stream } from "./store";
+import { useStore, type Stream } from "../store.ts";
 
 export function Footer() {
   const { streams } = useStore();
