@@ -16,6 +16,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -25,6 +26,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class CharityMain extends JavaPlugin {
   public static final String PLUGIN_ID = "charity_plugin";
   private VoicePlugin voicechatPlugin;
+
+  public static NamespacedKey anvilKey = new NamespacedKey("charity-main", "falling-anvil");
+  public static NamespacedKey waterGunKey = new NamespacedKey("charity-main", "water_gun");
+  public static NamespacedKey mysticArrowKey = new NamespacedKey("charity-main", "mystic_arrow");
+  public static NamespacedKey potatoKey = new NamespacedKey("charity-main", "hot_potato");
 
   @Override
   public void onDisable() {

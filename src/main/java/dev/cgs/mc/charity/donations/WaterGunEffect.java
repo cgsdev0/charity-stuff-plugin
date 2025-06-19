@@ -34,20 +34,11 @@ public class WaterGunEffect extends DonationEffect implements Listener {
     plugin.getServer().getOnlinePlayers().forEach(player -> { giveWaterGun(player); });
   }
 
-  public static NamespacedKey waterGunKey;
-  public static NamespacedKey mysticArrowKey;
-
-  public WaterGunEffect() {
-    CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
-    waterGunKey = new NamespacedKey(plugin, "water_gun");
-    mysticArrowKey = new NamespacedKey(plugin, "mystic_arrow");
-  }
-
   private boolean isWaterGun(ItemStack stack) {
     if (stack == null)
       return false;
     if (stack.getPersistentDataContainer().getOrDefault(
-            waterGunKey, PersistentDataType.BOOLEAN, false)) {
+            CharityMain.waterGunKey, PersistentDataType.BOOLEAN, false)) {
       return true;
     }
     return false;
@@ -63,7 +54,7 @@ public class WaterGunEffect extends DonationEffect implements Listener {
     ((Damageable) meta).setMaxDamage(10);
     gun.setItemMeta(meta);
     gun.editPersistentDataContainer(
-        pdc -> { pdc.set(waterGunKey, PersistentDataType.BOOLEAN, true); });
+        pdc -> { pdc.set(CharityMain.waterGunKey, PersistentDataType.BOOLEAN, true); });
     player.give(gun);
   }
 
@@ -82,8 +73,9 @@ public class WaterGunEffect extends DonationEffect implements Listener {
       //     new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.ARROW)));
       ItemStack realItem = p.getInventory().getItem(9);
       ItemStack mysticArrow = new ItemStack(Material.ARROW);
-      mysticArrow.editPersistentDataContainer(
-          consumer -> { consumer.set(mysticArrowKey, PersistentDataType.BOOLEAN, true); });
+      mysticArrow.editPersistentDataContainer(consumer -> {
+        consumer.set(CharityMain.mysticArrowKey, PersistentDataType.BOOLEAN, true);
+      });
       p.getInventory().setItem(9, mysticArrow);
 
       CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);

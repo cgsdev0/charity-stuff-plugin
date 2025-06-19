@@ -8,9 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
-import static dev.cgs.mc.charity.donations.HotPotatoEffect.potatoKey;
-
-@DonationEffect.Meta(key="butterfingers", name="Slippery Fingers", tier=Tier.TIER_1)
+@DonationEffect.Meta(key = "butterfingers", name = "Slippery Fingers", tier = Tier.TIER_1)
 public class ButterfingersEffect extends DonationEffect {
   @Override
   public void start(CharityMain plugin) {
@@ -19,8 +17,9 @@ public class ButterfingersEffect extends DonationEffect {
     onlinePlayers.forEach(player -> {
       ItemStack currentItem = player.getInventory().getItemInMainHand();
 
-      if(currentItem != null && !currentItem.isEmpty() && !isPotato(currentItem)) {
-        Item entity = player.getWorld().dropItem(player.getLocation().add(new Vector(0, 1, 0)), currentItem);
+      if (currentItem != null && !currentItem.isEmpty() && !isPotato(currentItem)) {
+        Item entity =
+            player.getWorld().dropItem(player.getLocation().add(new Vector(0, 1, 0)), currentItem);
 
         entity.setPickupDelay(40);
         entity.setThrower(player.getUniqueId());
@@ -35,7 +34,7 @@ public class ButterfingersEffect extends DonationEffect {
     if (stack == null)
       return false;
     if (stack.getPersistentDataContainer().getOrDefault(
-      potatoKey, PersistentDataType.BOOLEAN, false)) {
+            CharityMain.potatoKey, PersistentDataType.BOOLEAN, false)) {
       return true;
     }
     return false;

@@ -83,18 +83,12 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
   }
 
   private final String POTATO_LORE = "It's really hot!";
-  public static NamespacedKey potatoKey;
-
-  public HotPotatoEffect() {
-    CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
-    potatoKey = new NamespacedKey(plugin, "hot-potato");
-  }
 
   private boolean isPotato(ItemStack stack) {
     if (stack == null)
       return false;
     if (stack.getPersistentDataContainer().getOrDefault(
-            potatoKey, PersistentDataType.BOOLEAN, false)) {
+            CharityMain.potatoKey, PersistentDataType.BOOLEAN, false)) {
       return true;
     }
     return false;
@@ -119,7 +113,7 @@ public class HotPotatoEffect extends DonationEffect implements Listener {
     meta.setLore(lore);
     potato.setItemMeta(meta);
     potato.editPersistentDataContainer(
-        pdc -> { pdc.set(potatoKey, PersistentDataType.BOOLEAN, true); });
+        pdc -> { pdc.set(CharityMain.potatoKey, PersistentDataType.BOOLEAN, true); });
     PlayerInventory inv = player.getInventory();
     ItemStack hand = inv.getItemInMainHand();
     if (hand != null && !hand.isEmpty()) {
