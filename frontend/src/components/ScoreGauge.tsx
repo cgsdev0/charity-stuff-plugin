@@ -31,7 +31,7 @@ export function ScoreGauge() {
   const needleAngle = getAngle(jakeScore, badcopScore);
 
   return (
-    <div>
+    <div className="score-gauge">
       <TeamScore teamName="JAKE"/>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 423 230" width="423" height="230" className="border">
         <g>
