@@ -15,7 +15,7 @@ export interface Team {
   players: string[]; // UUIDs
   objectives: Array<{
     value: {
-      unlockedBy?: string; // UUID
+      unlockedBy: string; // UUID
       unlockedAt: string;
     };
     key: {
@@ -31,6 +31,7 @@ export interface Objective {
   name: string;
   key: string;
   worth: number;
+  description?: string;
 }
 
 export interface Stream {
