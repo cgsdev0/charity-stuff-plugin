@@ -11,9 +11,9 @@ export function TeamHeader({ teamName, alignment }: { teamName: string; alignmen
 
   return (
     <>
-      <div style={{ display: "flex", flex: 1, flexDirection: "column", justifyContent: "space-between", alignItems: alignment, padding: "20px" }}>
-        <h2 style={{ color: "white", marginTop: "0px" }}>TEAM {teamName}</h2>
-        <div style={{ height: 32, display: "flex", flexWrap: "wrap", gap: "5px", alignItems: "center", justifyContent: alignment }}>
+      <div className="team-header-container" style={{ alignItems: alignment }}>
+        <h2 className="team-name">TEAM {teamName}</h2>
+        <div className="player-icons" style={{ justifyContent: alignment }}>
           {playerNames.map((player) => (
             <span key={player}>
               <Avatar image={`https://mc-heads.net/avatar/${player}`} size="normal" data-pr-tooltip={player} />

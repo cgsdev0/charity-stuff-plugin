@@ -42,7 +42,7 @@ export function GoalsList({ teamName }: { teamName: string }) {
   });
 
   return (
-    <div className="grid-container" style={{ overflowY: "auto", scrollbarColor: "#ffffff #00000000" }}>
+    <div className="grid-container">
       {Goals.map((goal) => (
         <GoalCard goal={goal} key={goal.id} />
       ))}

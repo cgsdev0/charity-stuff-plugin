@@ -1,5 +1,4 @@
 import { Avatar } from "primereact/avatar";
-import { AvatarGroup } from "primereact/avatargroup";
 
 export interface Goal {
   name: string;
@@ -21,7 +20,7 @@ export function GoalCard({ goal }: { goal: Goal }) {
       <div className="col right">
         <div className="heads">
           {goal.by.slice(0, 4).map((player) => (
-            <Avatar key={player} image={`https://mc-heads.net/avatar/${player}`} size="normal" data-pr-tooltip={player} style={{ borderRadius: "0" }} />
+            <Avatar key={player} image={`https://mc-heads.net/avatar/${player}`} size="normal" data-pr-tooltip={player} />
           ))}
         </div>
         <span className="points">
@@ -34,24 +33,24 @@ export function GoalCard({ goal }: { goal: Goal }) {
   );
 }
 
-function Sticker({ amount }: { amount: number }) {
-  return (
-    <span
-      style={{
-        color: "white",
-        backgroundColor: "red",
-        border: "solid 2px white",
-        padding: "0px 6px",
-        borderRadius: "8px",
-        fontSize: "12px",
-        transform: "rotate(12deg)",
-        position: "absolute",
-        right: "-16px",
-        lineHeight: "initial",
-        top: "-2px",
-      }}
-    >
-      X{amount.toString()}
-    </span>
-  );
-}
+// function Sticker({ amount }: { amount: number }) {
+//   return (
+//     <span className="sticker"
+//       style={{
+//         color: "white",
+//         backgroundColor: "red",
+//         border: "solid 2px white",
+//         padding: "0px 6px",
+//         borderRadius: "8px",
+//         fontSize: "12px",
+//         transform: "rotate(12deg)",
+//         position: "absolute",
+//         right: "-16px",
+//         lineHeight: "initial",
+//         top: "-2px",
+//       }}
+//     >
+//       X{amount.toString()}
+//     </span>
+//   );
+// }
