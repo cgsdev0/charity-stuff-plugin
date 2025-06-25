@@ -168,7 +168,7 @@ async function twitchLoop() {
     };
     const newJson = JSON.stringify(payload);
     if (newJson !== twitchJson) {
-      updateEmitter.emit("update", JSON.stringify(newJson));
+      updateEmitter.emit("update", newJson);
       twitchJson = newJson;
     }
   } catch (e) {
