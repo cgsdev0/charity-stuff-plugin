@@ -55,6 +55,27 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
     return this.leader.hashCode();
   }
 
+  public Team opposite() {
+    Leader other = Leader.JAKE;
+    if (leader == Leader.JAKE)
+      other = Leader.BADCOP;
+    return Teams.get().fromLeader(other);
+  }
+
+  public void award(int points, Player who, String what) {
+    this.score += points;
+    Teams.get().saveData();
+    String teamName = this.toString();
+    Bukkit.getServer().sendMessage(Component.text(who.getName())
+            .append(Component.text(" completed "))
+            .append(Component.text("[" + what + "]")
+                    .color(NamedTextColor.GREEN)
+                    .append(Component.text(" for "))
+                    .append(Component.text(teamName).color(this.getColor()))
+                    .append(Component.text("! (+"))
+                    .append(Component.text(String.valueOf(points) + " points)"))));
+  }
+
   @Override
   public Map<String, Object> serialize() {
     Map<String, Object> data = new HashMap<String, Object>();

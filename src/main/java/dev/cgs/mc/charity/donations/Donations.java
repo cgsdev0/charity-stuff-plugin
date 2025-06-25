@@ -19,6 +19,8 @@ import java.util.Set;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -98,7 +100,11 @@ public class Donations {
             start(selected.meta.key());
             if (!selected.meta.no_title()) {
               Teams.get().showTitle(Title.title(
-                  Component.text(selected.meta.name()), Component.text(first.toString())));
+                  Component.text(selected.meta.name())
+                      .color(first.tier == DonationEffect.Tier.TIER_1    ? NamedTextColor.AQUA
+                              : first.tier == DonationEffect.Tier.TIER_2 ? NamedTextColor.GREEN
+                                                                         : NamedTextColor.RED),
+                  first.toComponent()));
             }
             this.cancel();
           } else if (!selected.meta.no_warning()) {
@@ -227,12 +233,14 @@ public class Donations {
   }
 
   public class TiltifyEvent {
-    @Override
-    public String toString() {
+    public TextComponent toComponent() {
       if (synthetic)
-        return "";
-      return this.data.amount.value + " " + this.data.amount.currency + " donated by "
-          + this.data.donor_name + "!";
+        return Component.text("");
+      return Component.text(this.data.amount.toString())
+          .color(NamedTextColor.GOLD)
+          .append(Component.text(" donated by ").color(NamedTextColor.WHITE))
+          .append(Component.text(this.data.donor_name).color(NamedTextColor.LIGHT_PURPLE))
+          .append(Component.text("!").color(NamedTextColor.WHITE));
     }
 
     public static final String tier1 = "569de385-9825-47c8-910f-19dfd2cee6e6";
@@ -266,6 +274,10 @@ public class Donations {
       public class Amount {
         public String currency;
         public String value;
+        @Override
+        public String toString() {
+          return value + " " + currency;
+        }
       }
       public Amount amount;
       public String campaign_id;

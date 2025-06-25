@@ -15,6 +15,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -57,8 +58,7 @@ public final class CharityMain extends JavaPlugin {
       hub.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
       hub.setSpawnFlags(false, false);
       hub.setTime(6000);
-      hub.setSpawnLocation(0, 100, 0);
-      hub.getBlockAt(0, 98, 0).setType(Material.BEDROCK);
+      // hub.getBlockAt(0, 98, 0).setType(Material.BEDROCK);
     }
 
     creator = new WorldCreator("parkour");
@@ -73,7 +73,8 @@ public final class CharityMain extends JavaPlugin {
       parkour.setSpawnFlags(false, false);
       parkour.setTime(6000);
       parkour.setSpawnLocation(0, 1, 0);
-      parkour.getBlockAt(0, 0, 0).setType(Material.BEDROCK);
+      parkour.setSpawnLocation(new Location(parkour, 0, 1, 0));
+      // parkour.getBlockAt(0, 0, 0).setType(Material.BEDROCK);
     }
 
     World world = getServer().getWorld("world");
@@ -97,6 +98,8 @@ public final class CharityMain extends JavaPlugin {
     for (World w : getServer().getWorlds()) {
       w.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
       w.setGameRule(GameRule.KEEP_INVENTORY, true);
+      w.setGameRule(GameRule.LOCATOR_BAR, false);
+      w.setGameRule(GameRule.MINECART_MAX_SPEED, 100);
     }
 
     // clang-format off
@@ -118,7 +121,9 @@ public final class CharityMain extends JavaPlugin {
       new ALilToTheLeftEffect(),
       new BigScaleEffect(),
       new SmallScaleEffect(),
-      new TimeSlowEffect()
+      new TimeSlowEffect(),
+      new ParkourEffect(),
+      new LavaFloorEffect()
     );
 
     Objectives.get().registerObjectives(
