@@ -158,17 +158,21 @@ const queryTwitch = async (retry_count = 3) => {
 
 let twitchJson = "";
 async function twitchLoop() {
-  await queryTwitch();
-  const payload = {
-    type: "streams",
-    data: Object.values(twitchCache)
-      .filter((o) => o.live)
-      .map(({ live, ...rest }) => rest),
-  };
-  const newJson = JSON.stringify(payload);
-  if (newJson !== twitchJson) {
-    updateEmitter.emit("update", JSON.stringify(newJson));
-    twitchJson = newJson;
+  try {
+    await queryTwitch();
+    const payload = {
+      type: "streams",
+      data: Object.values(twitchCache)
+        .filter((o) => o.live)
+        .map(({ live, ...rest }) => rest),
+    };
+    const newJson = JSON.stringify(payload);
+    if (newJson !== twitchJson) {
+      updateEmitter.emit("update", JSON.stringify(newJson));
+      twitchJson = newJson;
+    }
+  } catch (e) {
+    console.error("twitch update failed", e);
   }
   setTimeout(twitchLoop, 60 * 1000);
 }

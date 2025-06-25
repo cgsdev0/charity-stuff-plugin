@@ -56,6 +56,10 @@ public class Teams implements Listener, ForwardingAudience {
     return this.teams;
   }
 
+  public @NotNull Iterable<Player> getOnlinePlayers() {
+    return this.teams.stream().flatMap(team -> team.getOnlinePlayers().stream()).toList();
+  }
+
   public void updateRecruiters() {
     Team a = this.teams.get(0);
     Team b = this.teams.get(1);

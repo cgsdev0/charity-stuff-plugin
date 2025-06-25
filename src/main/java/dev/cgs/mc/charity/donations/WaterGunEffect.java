@@ -2,7 +2,10 @@ package dev.cgs.mc.charity.donations;
 
 import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.donations.DonationEffect.Tier;
+import dev.cgs.mc.charity.teams.Teams;
 import java.util.concurrent.ThreadLocalRandom;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,7 +34,7 @@ import org.bukkit.util.Vector;
 public class WaterGunEffect extends DonationEffect implements Listener {
   @Override
   public void start(CharityMain plugin) {
-    plugin.getServer().getOnlinePlayers().forEach(player -> { giveWaterGun(player); });
+    Teams.get().getOnlinePlayers().forEach(player -> { giveWaterGun(player); });
   }
 
   private boolean isWaterGun(ItemStack stack) {
@@ -56,6 +59,8 @@ public class WaterGunEffect extends DonationEffect implements Listener {
     gun.editPersistentDataContainer(
         pdc -> { pdc.set(CharityMain.waterGunKey, PersistentDataType.BOOLEAN, true); });
     player.give(gun);
+    player.playSound(Sound.sound(Key.key("entity.generic.splash"), Sound.Source.MASTER, 1.0f, 1.2f),
+        Sound.Emitter.self());
   }
 
   @EventHandler

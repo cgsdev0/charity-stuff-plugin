@@ -4,6 +4,8 @@ import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.donations.DonationEffect.Tier;
 import java.util.HashSet;
 import java.util.Set;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
@@ -14,7 +16,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.persistence.PersistentDataType;
 
-@DonationEffect.Meta(key = "anvil", name = "Raining Anvils!", tier = Tier.TIER_2)
+@DonationEffect.Meta(key = "anvil", name = "Don't Look Up", tier = Tier.TIER_2)
 public class AnvilRainEffect extends DonationEffect implements Listener {
   public Set<Location> anvils = new HashSet<>();
   @Override
@@ -24,6 +26,9 @@ public class AnvilRainEffect extends DonationEffect implements Listener {
     onlinePlayers.forEach(player -> {
       Location playerLoc = player.getLocation();
       Location directHit = playerLoc.clone().add(0, 20, 0);
+      Location aboveYou = playerLoc.clone().add(0, 5, 0);
+      player.playSound(Sound.sound(Key.key("item.mace.smash_air"), Sound.Source.MASTER, 1f, 0.8f),
+          aboveYou.x(), aboveYou.y(), aboveYou.z());
 
       FallingBlock fallingAnvil =
           (FallingBlock) directHit.getWorld().spawnEntity(directHit, EntityType.FALLING_BLOCK);
@@ -69,7 +74,7 @@ public class AnvilRainEffect extends DonationEffect implements Listener {
       }
       anvils.clear();
       unlock();
-    }, 20 * 30); // 30s
+    }, 20 * 15); // 30s
   }
 
   @EventHandler

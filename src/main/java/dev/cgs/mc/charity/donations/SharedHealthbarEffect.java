@@ -6,6 +6,8 @@ import dev.cgs.mc.charity.teams.Team;
 import dev.cgs.mc.charity.teams.Teams;
 import java.util.HashMap;
 import java.util.Map;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,6 +27,9 @@ public class SharedHealthbarEffect extends DonationEffect implements Listener {
 
   @Override
   public void start(CharityMain plugin) {
+    Teams.get().playSound(
+        Sound.sound(Key.key("entity.ender_dragon.growl"), Sound.Source.MASTER, 0.9f, 1.0f),
+        Sound.Emitter.self());
     lock();
     startForTeam(plugin, Teams.get().fromLeader(Team.Leader.JAKE));
     startForTeam(plugin, Teams.get().fromLeader(Team.Leader.BADCOP));

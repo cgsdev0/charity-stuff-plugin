@@ -1,10 +1,16 @@
 package dev.cgs.mc.charity.donations;
 
+import com.google.gson.Gson;
 import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.teams.Teams;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +27,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Donations {
   private static Donations instance;
-  private Queue<DonationEffect.Tier> redeemQueue = new ArrayDeque<>();
+  private Queue<TiltifyEvent> redeemQueue = new ArrayDeque<>();
   private boolean loopActive = false;
 
   private Map<DonationEffect.Tier, Shuffler> shufflers = new HashMap<>();
@@ -64,8 +70,10 @@ public class Donations {
     }
   }
 
-  public void queue(DonationEffect.Tier tier) {
-    redeemQueue.add(tier);
+  Thread eventReader;
+
+  public void queue(TiltifyEvent event) {
+    redeemQueue.add(event);
     if (!loopActive) {
       runLoop();
     }
@@ -79,7 +87,7 @@ public class Donations {
     var first = redeemQueue.remove();
 
     CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
-    var shuffler = shufflers.get(first);
+    var shuffler = shufflers.get(first.tier);
     AugmentedEffect selected = shuffler.pop();
     if (selected != null) {
       new BukkitRunnable() {
@@ -89,13 +97,20 @@ public class Donations {
           if (tick >= 3) {
             start(selected.meta.key());
             if (!selected.meta.no_title()) {
-              Teams.get().showTitle(
-                  Title.title(Component.text(selected.meta.name()), Component.text("")));
+              Teams.get().showTitle(Title.title(
+                  Component.text(selected.meta.name()), Component.text(first.toString())));
             }
             this.cancel();
           } else if (!selected.meta.no_warning()) {
+            float pitch = 1.0f;
+            if (first.tier == DonationEffect.Tier.TIER_2) {
+              pitch = 0.75f;
+            }
+            if (first.tier == DonationEffect.Tier.TIER_3) {
+              pitch = 0.5f;
+            }
             Teams.get().playSound(
-                Sound.sound(Key.key("block.note_block.pling"), Sound.Source.MASTER, 1f, 1.0f),
+                Sound.sound(Key.key("block.note_block.pling"), Sound.Source.MASTER, 1f, pitch),
                 Sound.Emitter.self());
           }
           tick++;
@@ -204,18 +219,107 @@ public class Donations {
       }
     }
   }
+  public TiltifyEvent fakeEvent(DonationEffect.Tier tier) {
+    var event = new TiltifyEvent();
+    event.tier = tier;
+    event.synthetic = true;
+    return event;
+  }
+
+  public class TiltifyEvent {
+    @Override
+    public String toString() {
+      if (synthetic)
+        return "";
+      return this.data.amount.value + " " + this.data.amount.currency + " donated by "
+          + this.data.donor_name + "!";
+    }
+
+    public static final String tier1 = "569de385-9825-47c8-910f-19dfd2cee6e6";
+    public static final String tier2 = "2c89bd2f-b272-4637-a373-8b8e80bc0b4f";
+    public static final String tier3 = "5da39e18-7005-493d-8bba-6032a1944615";
+
+    public DonationEffect.Tier tier;
+    public boolean synthetic = false;
+
+    public void calculateTier() {
+      tier = DonationEffect.Tier.TIER_1;
+      if ("USD".equals(data.amount.currency)) {
+        double amt = Double.parseDouble(data.amount.value);
+        if (amt >= 10.0) {
+          tier = DonationEffect.Tier.TIER_2;
+        }
+        if (amt >= 100.0) {
+          tier = DonationEffect.Tier.TIER_3;
+        }
+      } else {
+        if (tier2.equals(data.reward_id)) {
+          tier = DonationEffect.Tier.TIER_2;
+        }
+        if (tier3.equals(data.reward_id)) {
+          tier = DonationEffect.Tier.TIER_3;
+        }
+      }
+    }
+
+    public class EventData {
+      public class Amount {
+        public String currency;
+        public String value;
+      }
+      public Amount amount;
+      public String campaign_id;
+      public String cause_id;
+      public Date completed_at;
+      public Date created_at;
+      public String donor_comment;
+      public String donor_name;
+      public String id;
+      public String reward_id;
+    }
+    public EventData data;
+    public class Meta {
+      public String id;
+      public String event_type;
+      public Date attempted_at;
+      public Date generated_at;
+      public String subscription_source_id;
+      public String subscription_source_type;
+    }
+    public Meta meta;
+  }
+  public void readEvents() {
+    String pipePath = "/tmp/tiltify";
+    try (BufferedReader reader =
+             new BufferedReader(new InputStreamReader(new FileInputStream(pipePath)))) {
+      String line;
+      while (get() != null) {
+        line = reader.readLine(); // blocks until input arrives
+        if (line == null) {
+          continue;
+        }
+        System.out.println("Received: " + line);
+        TiltifyEvent event = new Gson().fromJson(line, TiltifyEvent.class);
+        event.calculateTier();
+        CharityMain plugin = JavaPlugin.getPlugin(CharityMain.class);
+        Bukkit.getScheduler().runTask(plugin, task -> { this.queue(event); });
+        System.out.println("Parsed: " + new Gson().toJson(event));
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
   public static void onEnable() {
     if (instance != null) {
       throw new IllegalStateException("Donations is already initialized.");
     }
     instance = new Donations();
+    instance.eventReader = new Thread(instance::readEvents);
+    instance.eventReader.start();
   }
 
   public static Donations get() {
-    if (instance == null) {
-      throw new IllegalStateException("Donations not initialized yet.");
-    }
     return instance;
   }
 

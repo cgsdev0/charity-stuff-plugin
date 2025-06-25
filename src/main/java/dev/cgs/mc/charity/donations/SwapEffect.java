@@ -6,10 +6,12 @@ import dev.cgs.mc.charity.teams.Team;
 import dev.cgs.mc.charity.teams.Teams;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-@DonationEffect.Meta(key = "swap", name = "Swap Position", tier = Tier.TIER_1)
+@DonationEffect.Meta(key = "swap", name = "Player Swap", tier = Tier.TIER_1)
 public class SwapEffect extends DonationEffect {
   @Override
   public void start(CharityMain plugin) {
@@ -30,5 +32,11 @@ public class SwapEffect extends DonationEffect {
 
     randomPlayerA.teleport(locB);
     randomPlayerB.teleport(locA);
+    Teams.get().playSound(
+        Sound.sound(Key.key("item.chorus_fruit.teleport"), Sound.Source.MASTER, 1.0f, 1.0f),
+        locA.x(), locA.y(), locA.z());
+    Teams.get().playSound(
+        Sound.sound(Key.key("item.chorus_fruit.teleport"), Sound.Source.MASTER, 1.0f, 1.0f),
+        locB.x(), locB.y(), locB.z());
   }
 }

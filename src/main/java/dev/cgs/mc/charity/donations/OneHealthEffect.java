@@ -2,6 +2,7 @@ package dev.cgs.mc.charity.donations;
 
 import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.donations.DonationEffect.Tier;
+import dev.cgs.mc.charity.teams.Teams;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
@@ -20,6 +21,9 @@ public class OneHealthEffect extends DonationEffect implements Listener {
   public void start(CharityMain plugin) {
     lock();
     active = true;
+    Teams.get().playSound(
+        Sound.sound(Key.key("entity.ender_dragon.growl"), Sound.Source.MASTER, 0.9f, 1.0f),
+        Sound.Emitter.self());
     var run = new BukkitRunnable() {
       int amt = 20;
       @Override

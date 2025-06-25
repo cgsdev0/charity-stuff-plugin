@@ -208,7 +208,8 @@ public final class CharityMain extends JavaPlugin {
             Stream.of(DonationEffect.Tier.values()).map(Enum::name).toArray(String[] ::new)))
         .executes((sender, args) -> {
           String tier = (String) args.get("tier");
-          Donations.get().queue(DonationEffect.Tier.valueOf(tier));
+          var event = Donations.get().fakeEvent(DonationEffect.Tier.valueOf(tier));
+          Donations.get().queue(event);
         })
         .register();
 

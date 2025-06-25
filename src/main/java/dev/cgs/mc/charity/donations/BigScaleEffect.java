@@ -3,6 +3,7 @@ package dev.cgs.mc.charity.donations;
 import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.VoicePlugin;
 import dev.cgs.mc.charity.donations.DonationEffect.Tier;
+import dev.cgs.mc.charity.teams.Teams;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
@@ -25,6 +26,7 @@ public class BigScaleEffect extends DonationEffect implements Listener {
     double pitch = 1.0 - growth * 0.4;
     double stepModifier = 0.6 * (1.0 + growth);
     double rangeModifier = 4.5 * (1.0 + growth);
+    double rangeModifier2 = 3.0 * (1.0 + growth);
     double jumpModifier = 0.42 * (1.0 + growth);
     double safeFallModifier = 3.0 * (1.0 + growth);
     double speedModifier = 0.1 * (1.0 + growth);
@@ -33,6 +35,7 @@ public class BigScaleEffect extends DonationEffect implements Listener {
     a.getAttribute(Attribute.SCALE).setBaseValue(growth * maxSize + 1.0);
     a.getAttribute(Attribute.STEP_HEIGHT).setBaseValue(stepModifier);
     a.getAttribute(Attribute.BLOCK_INTERACTION_RANGE).setBaseValue(rangeModifier);
+    a.getAttribute(Attribute.ENTITY_INTERACTION_RANGE).setBaseValue(rangeModifier2);
     a.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(jumpModifier);
     a.getAttribute(Attribute.SAFE_FALL_DISTANCE).setBaseValue(safeFallModifier);
     a.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(speedModifier);
@@ -41,6 +44,9 @@ public class BigScaleEffect extends DonationEffect implements Listener {
   public void start(CharityMain plugin) {
     lock();
     active = true;
+    Teams.get().playSound(
+        Sound.sound(Key.key("entity.ender_dragon.growl"), Sound.Source.MASTER, 0.9f, 1.0f),
+        Sound.Emitter.self());
     var run = new BukkitRunnable() {
       double amt = 1.0;
       @Override

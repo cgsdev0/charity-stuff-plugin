@@ -37,6 +37,7 @@ dependencies {
   compileOnly("de.maxhenkel.voicechat:voicechat-api:2.5.27")
   compileOnly("de.oliver:FancyNpcs:2.5.2")
   compileOnly("de.oliver:FancyHolograms:2.5.0")
+  implementation("com.google.code.gson:gson:2.13.1")
 }
 
 tasks {
