@@ -3,18 +3,10 @@ import { useStore } from "../store.ts";
 import { TeamScore } from "./TeamScore.tsx";
 
 function getAngle(leftScore: number, rightScore: number) {
+  const maxDiff = 100;
   const diff = rightScore - leftScore;
-  let angle = 0;
-
-  if (diff === 0) return 0;
-  const avgScore = (leftScore + rightScore) / 2;
-  const dampening = 1 + avgScore / 50;
-  const dampedDiff = diff / dampening;
-  const maxScore = Math.max(leftScore, rightScore);
-  const normalizedDampened = maxScore > 0 ? dampedDiff / maxScore : 0;
-  angle = normalizedDampened * 90;
-
-  return Math.max(-90, Math.min(90, angle));
+  const clamped = Math.max(-maxDiff, Math.min(maxDiff, diff));
+  return (clamped / maxDiff) * 90;
 }
 
 export function ScoreGauge() {
