@@ -32,6 +32,7 @@ public final class CharityMain extends JavaPlugin {
   public static NamespacedKey waterGunKey = new NamespacedKey("charity-main", "water_gun");
   public static NamespacedKey mysticArrowKey = new NamespacedKey("charity-main", "mystic_arrow");
   public static NamespacedKey potatoKey = new NamespacedKey("charity-main", "hot_potato");
+  public static NamespacedKey armorKey = new NamespacedKey("charity-main", "tagged_armor");
 
   @Override
   public void onDisable() {
@@ -145,13 +146,21 @@ public final class CharityMain extends JavaPlugin {
       new MaxEnchantObjective(),
       new CatchFishObjective(),
       new FullIronObjective(),
+      new FullDiamondObjective(),
+      new FullNetheriteObjective(),
       new FishEnchantedObjective(),
       new GlowberryObjective(),
       new WitherObjective(),
       new WardenObjective(),
       new TridentObjective(),
       new HeartOfTheSeaObjective(),
-      new FriendlyGestureObjective()
+      new FriendlyGestureObjective(),
+      new StayHydratedObjective(),
+      new UnderLockAndKeyObjective(),
+      new RevaultingObjective(),
+      new BullseyeObjective(),
+      new CraftingNewLookObjective(),
+      new SkyLimitObjective()
     );
     // clang-format on
 

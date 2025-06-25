@@ -199,7 +199,7 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
     this.score = 0;
   }
 
-  public void unlock(String objective, OfflinePlayer who) {
+  public boolean unlock(String objective, OfflinePlayer who) {
     Objective.Meta meta = Objectives.get().getMeta(objective);
     ObjectiveKey key = new ObjectiveKey(objective, who);
     if (!players.contains(who)) {
@@ -209,7 +209,7 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
       key.player = null;
     }
     if (objectives.containsKey(key)) {
-      return;
+      return false;
     }
     score += meta.worth();
     UnlockMeta unlock = new UnlockMeta();
@@ -228,6 +228,7 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
             .append(Component.text(teamName).color(this.getColor()))
             .append(Component.text("! (+"))
             .append(Component.text(String.valueOf(meta.worth()) + " points)")));
+    return true;
   }
 
   public boolean hasPlayer(OfflinePlayer player) {

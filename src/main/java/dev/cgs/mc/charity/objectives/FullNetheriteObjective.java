@@ -17,9 +17,9 @@ import org.bukkit.persistence.PersistentDataType;
 
 import dev.cgs.mc.charity.CharityMain;
 
-@Objective.Meta(key = "full_iron", name = "Full Iron", kind = Objective.Kind.PER_PLAYER, worth = 5,
-    desc = "Equip full iron armor")
-public class FullIronObjective extends Objective implements Listener {
+@Objective.Meta(key = "full_netherite", name = "Full Netherite", kind = Objective.Kind.PER_PLAYER, worth = 100,
+    desc = "Equip full netherite armor")
+public class FullNetheriteObjective extends Objective implements Listener {
   @EventHandler
   public void onEquip(EntityEquipmentChangedEvent event) {
     if (event.getEntity() instanceof Player player) {
@@ -31,8 +31,8 @@ public class FullIronObjective extends Objective implements Listener {
         if (item.getPersistentDataContainer().getOrDefault(CharityMain.armorKey, PersistentDataType.BOOLEAN, false)) {
           return;
         }
-        if (m == Material.IRON_BOOTS || m == Material.IRON_LEGGINGS || m == Material.IRON_CHESTPLATE
-            || m == Material.IRON_HELMET)
+        if (m == Material.NETHERITE_BOOTS || m == Material.NETHERITE_LEGGINGS || m == Material.NETHERITE_CHESTPLATE
+            || m == Material.NETHERITE_HELMET)
           continue;
         return;
       }

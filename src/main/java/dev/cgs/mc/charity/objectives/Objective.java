@@ -40,11 +40,11 @@ public abstract class Objective {
     this.meta = meta;
   }
 
-  public void unlock(Player player) {
+  public boolean unlock(Player player) {
     Team t = Teams.get().fromPlayer(player);
     if (t == null) {
-      return;
+      return false;
     }
-    t.unlock(meta.key(), player);
+    return t.unlock(meta.key(), player);
   }
 }
