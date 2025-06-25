@@ -282,6 +282,7 @@ body {
   }
 
   .points {
+    margin-left: 20px;
     position: relative;
     font-size: 32px;
     flex-grow: 1;

@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
 @Objective.Meta(key = "eat_glowberry", name = "Light Snack", kind = Objective.Kind.PER_PLAYER,
-    worth = 1, desc = "Eat some glowberries.")
+    worth = 1, desc = "Eat some glowberries")
 public class GlowberryObjective extends Objective implements Listener {
   @EventHandler
   public void onEat(PlayerItemConsumeEvent event) {

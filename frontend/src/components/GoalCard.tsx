@@ -25,7 +25,7 @@ export function GoalCard({ goal }: { goal: Goal }) {
             </>
           ) : null}
           {goal.description}
-          {goal.kind === "PER_PLAYER" ? "(per player)" : ""}
+          {goal.kind === "PER_PLAYER" ? " (per player)" : ""}
         </span>
       </div>
       <div className="col right">

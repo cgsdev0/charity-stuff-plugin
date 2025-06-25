@@ -7,7 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-@Objective.Meta(key = "full_iron", name = "Full Iron", kind = Objective.Kind.PER_PLAYER, worth = 5)
+@Objective.Meta(key = "full_iron", name = "Full Iron", kind = Objective.Kind.PER_PLAYER, worth = 5,
+    desc = "Equip full iron armor")
 public class FullIronObjective extends Objective implements Listener {
   @EventHandler
   public void onEquip(EntityEquipmentChangedEvent event) {
