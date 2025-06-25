@@ -7,6 +7,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -52,7 +54,11 @@ public class WaterGunEffect extends DonationEffect implements Listener {
     ItemMeta meta = gun.getItemMeta();
     int idx = ThreadLocalRandom.current().nextInt(3) + 1;
     meta.setItemModel(new NamespacedKey("custom", "water_gun" + String.valueOf(idx)));
-    meta.customName(Component.text("Water Gun"));
+    meta.customName(Component.text("Water Gun")
+            .decoration(TextDecoration.ITALIC, false)
+            .color(idx == 1    ? NamedTextColor.GREEN
+                    : idx == 2 ? NamedTextColor.LIGHT_PURPLE
+                               : NamedTextColor.AQUA));
     ((Repairable) meta).setRepairCost(50);
     ((Damageable) meta).setMaxDamage(10);
     gun.setItemMeta(meta);

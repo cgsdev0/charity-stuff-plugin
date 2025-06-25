@@ -29,10 +29,7 @@ function App() {
               <GoalsList teamName="BADCOP" />
             </section>
           </div>
-          <footer>
-            Live Now
-            <TwitchIcons />
-          </footer>
+          <TwitchIcons />
         </div>
       </PrimeReactProvider>
     </>

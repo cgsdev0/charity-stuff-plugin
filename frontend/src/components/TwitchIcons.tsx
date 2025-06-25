@@ -2,13 +2,16 @@ import { useStore, type Stream } from "../store.ts";
 
 export function TwitchIcons() {
   const { streams } = useStore();
-  return (
-    <div>
-      {streams.map((stream) => (
-        <Streamer key={stream.user_id} stream={stream} />
-      ))}
-    </div>
-  );
+  return streams.length ? (
+    <footer>
+      Live Now
+      <div>
+        {streams.map((stream) => (
+          <Streamer key={stream.user_id} stream={stream} />
+        ))}
+      </div>
+    </footer>
+  ) : null;
 }
 
 function Streamer(props: { stream: Stream }) {
