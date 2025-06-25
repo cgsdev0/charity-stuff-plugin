@@ -25,6 +25,7 @@ export function GoalsList({ teamName }: { teamName: string }) {
       kind: objective.kind,
       unlocked: unlocked,
       description: objective.description,
+      advancement: objective.advancement,
       by: unlockedBy,
       id: objective.key,
     };

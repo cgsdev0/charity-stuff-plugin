@@ -6,6 +6,7 @@ export interface Goal {
   points: number;
   kind: string;
   unlocked: boolean;
+  advancement?: string;
   id: string;
   by: string[];
 }
@@ -15,7 +16,17 @@ export function GoalCard({ goal }: { goal: Goal }) {
     <div className={`goal-card ${goal.unlocked ? "unlocked" : ""}`}>
       <div className="col">
         <span className="name">{goal.name}</span>
-        <span className="description">{goal.description}</span>
+        <span className="description">
+          {goal.advancement ? (
+            <>
+              Vanilla achievement (<a className="wiki" href="https://minecraft.wiki/w/Advancement#List_of_advancements" target="_blank">
+                Minecraft Wiki
+              </a>)
+            </>
+          ) : null}
+          {goal.description}
+          {goal.kind === "PER_PLAYER" ? "(per player)" : ""}
+        </span>
       </div>
       <div className="col right">
         <div className="heads">

@@ -8,6 +8,14 @@ body,
   overflow: hidden;
 }
 
+.wiki {
+  color: #ffffff70;
+}
+
+.wiki:hover {
+  color: #ffffffd0;
+  text-decoration: none;
+}
 body {
   background: transparent;
   color: white;

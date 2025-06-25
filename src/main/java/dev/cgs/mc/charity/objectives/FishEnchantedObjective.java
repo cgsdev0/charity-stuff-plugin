@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 
 @Objective.Meta(key = "fish_enchanted", name = "Secrets of the Sea",
-    kind = Objective.Kind.PER_PLAYER, worth = 5)
+    kind = Objective.Kind.PER_PLAYER, worth = 5, desc = "Fish up an enchanted book")
 public class FishEnchantedObjective extends Objective implements Listener {
   @EventHandler
   public void onFish(PlayerFishEvent event) {

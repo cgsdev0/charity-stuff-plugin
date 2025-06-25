@@ -150,7 +150,8 @@ public final class CharityMain extends JavaPlugin {
       new WitherObjective(),
       new WardenObjective(),
       new TridentObjective(),
-      new HeartOfTheSeaObjective()
+      new HeartOfTheSeaObjective(),
+      new FriendlyGestureObjective()
     );
     // clang-format on
 

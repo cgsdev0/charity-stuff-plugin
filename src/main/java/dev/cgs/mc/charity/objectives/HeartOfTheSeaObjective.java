@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 @Objective.Meta(key = "heart_of_the_sea", name = "Treasure Hunter", kind = Objective.Kind.PER_TEAM,
-    worth = 20, desc = "Obtain a Heart of the Sea.")
+    worth = 20, desc = "Obtain a Heart of the Sea")
 public class HeartOfTheSeaObjective extends Objective implements Listener {
   @EventHandler
   public void onPickup(EntityPickupItemEvent event) {

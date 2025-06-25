@@ -12,7 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 
 @Objective.Meta(key = CatchFishObjective.key, name = "Fishing Expert",
-    kind = Objective.Kind.PER_PLAYER, worth = 5)
+    kind = Objective.Kind.PER_PLAYER, worth = 5, desc = "Catch 20 fish")
 public class CatchFishObjective extends Objective implements Listener {
   public static final String key = "catch_20_fish";
 

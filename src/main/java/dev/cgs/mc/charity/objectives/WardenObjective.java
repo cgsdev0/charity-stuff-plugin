@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 @Objective.Meta(key = "warden", name = "Warden Slayer", kind = Objective.Kind.PER_TEAM, worth = 100,
-    desc = "Kill the warden.")
+    desc = "Kill the warden")
 public class WardenObjective extends Objective implements Listener {
   @EventHandler
   public void onKill(EntityDeathEvent event) {

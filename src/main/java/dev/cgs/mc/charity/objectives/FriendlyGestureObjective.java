@@ -11,7 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 
 @Objective.Meta(key = "diamond_gift", name = "Friendly Gesture", kind = Objective.Kind.PER_PLAYER,
-    worth = 2, desc = "Give a diamond to the opposing team.")
+    worth = 2, desc = "Give a diamond to the opposing team")
 public class FriendlyGestureObjective extends Objective implements Listener {
   @EventHandler
   public void onPickup(EntityPickupItemEvent event) {

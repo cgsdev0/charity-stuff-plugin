@@ -6,10 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDropItemEvent;
 
-@Objective.Meta(
-    key = "mine_diamonds", name = "Diamonds!", kind = Objective.Kind.PER_PLAYER, worth = 2)
+@Objective.Meta(key = "mine_diamonds", name = "Diamonds!", kind = Objective.Kind.PER_PLAYER,
+    worth = 2, desc = "Mine diamond ore")
 public class MineDiamondObjective extends Objective implements Listener {
-
   @EventHandler
   public void onBreak(BlockDropItemEvent event) {
     Player p = event.getPlayer();
