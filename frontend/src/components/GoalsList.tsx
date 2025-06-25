@@ -32,9 +32,9 @@ export function GoalsList({ teamName }: { teamName: string }) {
   });
 
   Goals.sort((a, b) => {
-    if (a.unlocked !== b.unlocked) {
-      return a.unlocked ? 1 : -1;
-    }
+    // if (a.unlocked !== b.unlocked) {
+    //   return a.unlocked ? 1 : -1;
+    // }
     if (a.points !== b.points) {
       return a.points - b.points;
     }

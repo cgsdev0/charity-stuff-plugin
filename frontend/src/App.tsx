@@ -23,11 +23,14 @@ function App() {
             <ScoreGauge />
             <TeamHeader teamName="BADCOP" alignment="flex-end" />
           </header>
-          <section className="goals">
-            <GoalsList teamName="JAKE" />
-            <GoalsList teamName="BADCOP" />
-          </section>
+          <div className="goals">
+            <section>
+              <GoalsList teamName="JAKE" />
+              <GoalsList teamName="BADCOP" />
+            </section>
+          </div>
           <footer>
+            Live Now
             <TwitchIcons />
           </footer>
         </div>
