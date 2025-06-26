@@ -56,6 +56,7 @@ public class ParkourEffect extends DonationEffect implements Listener {
       player.playSound(
           Sound.sound(Key.key("item.chorus_fruit.teleport"), Sound.Source.MASTER, 1.0f, 1.0f),
           Sound.Emitter.self());
+      player.setFallDistance(0.f);
     }
   }
 
