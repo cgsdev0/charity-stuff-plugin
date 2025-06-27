@@ -27,6 +27,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
 @DonationEffect.Meta(key = "parkour", name = "Mandatory Parkour", tier = Tier.TIER_3)
@@ -47,6 +48,7 @@ public class ParkourEffect extends DonationEffect implements Listener {
   }
 
   public void restore(Player player) {
+    enableCollision(player);
     if (invs.containsKey(player.getUniqueId())) {
       Storage s = invs.remove(player.getUniqueId());
       var inventory = player.getInventory();
@@ -60,7 +62,29 @@ public class ParkourEffect extends DonationEffect implements Listener {
     }
   }
 
+  private static final String TEAM_NAME = "no_collide_team";
+  
+    private void disableCollision(Player player) {
+      Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+      org.bukkit.scoreboard.Team team = scoreboard.getTeam(TEAM_NAME);
+      if (team == null) {
+          team = scoreboard.registerNewTeam(TEAM_NAME);
+          team.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE, org.bukkit.scoreboard.Team.OptionStatus.NEVER);
+      }
+      team.addEntity(player);
+  }
+
+  private void enableCollision(Player player) {
+    Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+      org.bukkit.scoreboard.Team team = scoreboard.getTeam(TEAM_NAME);
+        if (team != null) {
+          team.removeEntity(player);
+    }
+  }
+
+
   public void warp(Player player) {
+    disableCollision(player);
     if (!player.getWorld().getName().equals("parkour")) {
       Storage s = new Storage();
       s.items = player.getInventory().getContents().clone();
