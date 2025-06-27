@@ -124,7 +124,12 @@ public final class CharityMain extends JavaPlugin {
       new SmallScaleEffect(),
       new TimeSlowEffect(),
       new ParkourEffect(),
-      new LavaFloorEffect()
+      new LavaFloorEffect(),
+      new DrinksEffect(),
+      new ShuffleEffect(),
+      new TeamMeetingEffect(),
+      new LaunchEffect(),
+      new MidasEffect()
     );
 
     Objectives.get().registerObjectives(
