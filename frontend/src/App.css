@@ -258,6 +258,7 @@ body {
   height: 80px;
   flex-direction: row;
   justify-content: space-between;
+  overflow: hidden;
 
   .name {
     font-size: 20px;
