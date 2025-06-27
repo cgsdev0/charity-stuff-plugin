@@ -129,7 +129,9 @@ public final class CharityMain extends JavaPlugin {
       new ShuffleEffect(),
       new TeamMeetingEffect(),
       new LaunchEffect(),
-      new MidasEffect()
+      new MidasEffect(),
+      new SmeltEffect(),
+      new BeeEffect()
     );
 
     Objectives.get().registerObjectives(

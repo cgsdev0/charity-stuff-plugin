@@ -20,7 +20,7 @@ public class LaunchEffect extends DonationEffect {
     Teams.get().playSound(
         Sound.sound(Key.key("item.chorus_fruit.teleport"), Sound.Source.MASTER, 1.0f, 1.0f));
     Teams.get().getOnlinePlayers().forEach(player -> {
-      player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 5 * 20, 99));
+      player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 4 * 20, 90));
     });
   }
 }
