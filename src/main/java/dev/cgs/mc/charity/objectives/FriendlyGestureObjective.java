@@ -30,7 +30,7 @@ public class FriendlyGestureObjective extends Objective implements Listener {
       if (a == null || b == null)
         return;
       if (ta.getLeader() != tb.getLeader()) {
-        unlock(b);
+        unlock(a);
       }
     }
   }
