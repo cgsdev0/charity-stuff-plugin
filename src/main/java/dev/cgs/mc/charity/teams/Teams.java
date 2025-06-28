@@ -5,6 +5,8 @@ import de.oliver.fancynpcs.api.Npc;
 import de.oliver.fancynpcs.api.NpcData;
 import de.oliver.fancynpcs.api.events.NpcsLoadedEvent;
 import dev.cgs.mc.charity.CharityMain;
+import io.papermc.paper.event.player.AsyncChatEvent;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +16,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
@@ -23,6 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,6 +41,29 @@ public class Teams implements Listener, ForwardingAudience {
 
   private List<Team> teams;
 
+    @EventHandler
+    public void onChat(AsyncChatEvent event) {
+        Player player = event.getPlayer();
+        org.bukkit.scoreboard.Team team = player.getScoreboard().getEntryTeam(player.getName());
+
+        Component name;
+        if (team != null) {
+            TextColor color = team.color(); // returns Adventure NamedTextColor
+            name = Component.text(player.getName(), color);
+        } else {
+            name = Component.text(player.getName());
+        }
+
+        Component message = event.message();
+        event.renderer((source, sourceDisplayName, msg, audience) ->
+                Component.text()
+                    .append(name)
+                    .append(Component.text(": "))
+                    .append(message)
+                    .build()
+        );
+    }
+    
   private Teams() {
     teams = new ArrayList<>();
     teams.add(new Team(Team.Leader.JAKE));

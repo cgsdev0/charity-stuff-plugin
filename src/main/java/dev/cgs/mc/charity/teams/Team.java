@@ -36,6 +36,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.NotNull;
 
 public class Team implements ConfigurationSerializable, ForwardingAudience {
@@ -93,7 +94,10 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
     return data;
   }
 
+  public org.bukkit.scoreboard.Team bukkitTeam;
   public Team(Map<String, Object> data) {
+    Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+    this.bukkitTeam = scoreboard.getTeam((String) data.get("leader"));
     this.leader = Team.Leader.valueOf((String) data.get("leader"));
     var players = (List<String>) data.get("players");
     this.players = new HashSet<>();
@@ -193,6 +197,8 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
 
   public Team(Leader leader) {
     this.leader = leader;
+    Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+    this.bukkitTeam = scoreboard.getTeam((String) leader.toString());
     this.objectives = new HashMap<>();
     this.players = new HashSet<>();
     this.onlinePlayers = new HashSet<>();
@@ -324,6 +330,7 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
     if (Teams.get().fromPlayer(player) != null) {
       return;
     }
+    bukkitTeam.addPlayer(player);
     player.playSound(
         Sound.sound(Key.key("entity.firework_rocket.launch"), Sound.Source.MASTER, 1f, 1f));
     onlinePlayers.add(player);
@@ -347,6 +354,7 @@ public class Team implements ConfigurationSerializable, ForwardingAudience {
 
   public void onLogin(Player player) {
     onlinePlayers.add(player);
+    bukkitTeam.addPlayer(player);
     String worldName = player.getLocation().getWorld().getName();
     if (worldName.equals("team_selection")) {
       Location l = Bukkit.getServer().getWorld("world").getSpawnLocation();
