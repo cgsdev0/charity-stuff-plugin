@@ -14,13 +14,13 @@ public class MineDiamondObjective extends Objective implements Listener {
     Player p = event.getPlayer();
     if (p == null)
       return;
-    if (event.getBlock().getType() != Material.DIAMOND_ORE)
+    if (event.getBlock().getType() != Material.DIAMOND_ORE && event.getBlock().getType() != Material.DEEPSLATE_DIAMOND_ORE)
       return;
     // breaking with your hand dont count
     if (event.getItems().isEmpty())
       return;
     // silk touch dont count
-    if (event.getItems().get(0).getItemStack().getType() == Material.DIAMOND_ORE)
+    if (event.getItems().get(0).getItemStack().getType() == Material.DIAMOND_ORE || event.getItems().get(0).getItemStack().getType() == Material.DEEPSLATE_DIAMOND_ORE)
       return;
     unlock(p);
   }

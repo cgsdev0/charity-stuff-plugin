@@ -97,6 +97,7 @@ public class Donations {
         @Override
         public void run() {
           if (tick >= 3) {
+            this.cancel();
             start(selected.meta.key());
             if (!selected.meta.no_title()) {
               Teams.get().showTitle(Title.title(
@@ -106,7 +107,6 @@ public class Donations {
                                                                          : NamedTextColor.RED),
                   first.toComponent()));
             }
-            this.cancel();
           } else if (!selected.meta.no_warning()) {
             float pitch = 1.0f;
             if (first.tier == DonationEffect.Tier.TIER_2) {

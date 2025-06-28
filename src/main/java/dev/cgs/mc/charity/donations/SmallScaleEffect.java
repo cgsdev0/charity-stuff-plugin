@@ -3,6 +3,7 @@ package dev.cgs.mc.charity.donations;
 import dev.cgs.mc.charity.CharityMain;
 import dev.cgs.mc.charity.VoicePlugin;
 import dev.cgs.mc.charity.donations.DonationEffect.Tier;
+import dev.cgs.mc.charity.teams.Teams;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
@@ -31,20 +32,6 @@ public class SmallScaleEffect extends DonationEffect implements Listener {
   public void start(CharityMain plugin) {
     lock();
     active = true;
-    var run = new BukkitRunnable() {
-      double amt = 1.0;
-      @Override
-      public void run() {
-        amt -= 0.005;
-        if (amt < minSize) {
-          this.cancel();
-          return;
-        }
-        var onlinePlayers = plugin.getServer().getOnlinePlayers();
-        onlinePlayers.forEach(player -> { updatePlayerAttrs(player, amt); });
-      }
-    };
-    run.runTaskTimer(plugin, 0L, 3L);
     Bukkit.getScheduler().runTaskLater(plugin, () -> {
       this.active = false;
       unlock();
@@ -55,6 +42,20 @@ public class SmallScaleEffect extends DonationEffect implements Listener {
         updatePlayerAttrs(player, 1.0);
       });
     }, 20 * 60 * 5); // 5 minutes
+    var run = new BukkitRunnable() {
+      double amt = 1.0;
+      @Override
+      public void run() {
+        amt -= 0.005;
+        if (amt < minSize) {
+          this.cancel();
+          return;
+        }
+        var onlinePlayers = Teams.get().getOnlinePlayers();
+        onlinePlayers.forEach(player -> { updatePlayerAttrs(player, amt); });
+      }
+    };
+    run.runTaskTimer(plugin, 0L, 3L);
   }
 
   @EventHandler
